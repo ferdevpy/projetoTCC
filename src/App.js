@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import PageHeader from "./components/PageHeader";
+import { Layout } from "antd";
+import { Component } from "react";
+import TopBar from "./conteiners/TopBar";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import Grid from "./conteiners/Grid";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const { Content } = Layout;
+class App extends Component {
+  render() {
+    return (
+      <Layout>
+        <DndProvider backend={HTML5Backend}>
+          <PageHeader />
+          <Layout>
+            <TopBar />
+            <Content>
+              <Grid/>
+            </Content>
+          </Layout>
+        </DndProvider>
+      </Layout>
+    );
+  }
 }
 
 export default App;
