@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Tabs, Space, Upload, Button } from "antd";
-import {
-  FolderOpenOutlined,
-  ExportOutlined,
-  FileOutlined,
-  DownOutlined,
-  UpOutlined,
-} from "@ant-design/icons";
+import { Tabs, Space, Button } from "antd";
+import { ExportOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
 import MenuSimulador from "./MenuSimulador";
-
+import CustomUploadButton from "../components/CustomUploadButtom";
+import { saveAs } from "file-saver";
+const LOCAL_STORAGE_KEY = "flowData";
 
 const TopBar = () => {
   const [collapsed, setCollapsed] = useState(true);
+
+  const handleDownloadJson = () => {
+    const jsonContent = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    saveAs(blob, "fluxogramaUsina.json");
+  };
 
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
@@ -27,19 +29,13 @@ const TopBar = () => {
       children: [
         collapsed ? (
           <Space direction="horizontal">
-            {" "}
-            <Upload>
-              <div style={{ textAlign: "center" }}>
-                <FolderOpenOutlined size={"large"} style={{ fontSize: 20 }} />
-                <div style={{ fontSize: 12 }}>Abrir Projeto</div>
-              </div>
-            </Upload>
+            <CustomUploadButton/>
             <div style={{ textAlign: "center" }}>
-              <FileOutlined size={"large"} style={{ fontSize: 20 }} />
-              <div style={{ fontSize: 12 }}>Novo Projeto</div>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <ExportOutlined size={"large"} style={{ fontSize: 20 }} />
+              <ExportOutlined
+                size={"large"}
+                style={{ fontSize: 20 }}
+                onClick={handleDownloadJson}
+              />
               <div style={{ fontSize: 12 }}>Exportar Projeto</div>
             </div>
           </Space>
@@ -60,7 +56,7 @@ const TopBar = () => {
 
   return (
     <div>
-      <Tabs items={items} onChange={handleTabChange} />
+      <Tabs items={items} onChange={handleTabChange} style={{ padding: 10 }} />
       {
         <div
           style={{ position: "absolute", top: 60, right: 0, padding: "10px" }}

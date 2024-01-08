@@ -19,12 +19,14 @@ const MenuSimulador = (props) => {
               src={"alimentacao.png"}
               label={"Alimentação"}
               type={"imageInput"}
-              style={{ width: 30, height: 30 }}
+              tag={"Alimentacao"}
+              style={{ width: 40, height: 40 }}
             />
             <BotaoArrastavel
               src={"pilha.png"}
               label={"Pilha"}
               type={"imageDefault"}
+              tag={"Pilha"}
               style={{ width: 40, height: 30 }}
             />
           </Space>
@@ -44,13 +46,15 @@ const MenuSimulador = (props) => {
               src={"britador_mandibula.png"}
               label={"Britador de mandibula"}
               type={"imageDefault"}
+              tag={"Britador"}
               style={{ width: 30, height: 30 }}
             />
             <BotaoArrastavel
               src={"britador_giratorio.png"}
               label={"Britador giratorio"}
               type={"imageDefault"}
-              style={{ width: 30, height: 30 }}
+              tag={"Britador"}
+              style={{ width: 40, height: 40 }}
             />
           </Space>
         </Col>
@@ -68,14 +72,16 @@ const MenuSimulador = (props) => {
             <BotaoArrastavel
               src={"moinho_barras.png"}
               label={"Moinho de Barras"}
-              type={"imageDefault"}
+              type={"imageDefaultMoagem"}
+              tag={"Moinho"}
               style={{ width: 40, height: 30 }}
             />
             <BotaoArrastavel
-              type={"imageDefault"}
+              type={"imageDefaultMoagem"}
               label="Moinho de bolas"
               src="moinho_bolas.png"
-              style={{ width: 40, height: 30 }}
+              tag={"Moinho"}
+              style={{ width: 40, height: 40 }}
             />
           </Space>
         </Col>
@@ -96,6 +102,7 @@ const MenuSimulador = (props) => {
                 type={"imageDefault"}
                 label="Espiral Classificadora"
                 src="espiral_classificadora.png"
+                tag={"Espiral"}
                 style={{ width: 20, height: 40 }}
               />
 
@@ -103,6 +110,7 @@ const MenuSimulador = (props) => {
                 type={"imageThree"}
                 label="Hidrociclone"
                 src="hidrociclone.png"
+                tag={"Hidrociclone"}
                 style={{ width: 20, height: 40 }}
               />
             </Space>
@@ -110,6 +118,7 @@ const MenuSimulador = (props) => {
               type={"imageDefault"}
               label="Mesa Vibratória"
               src="mesa_vibratoria.png"
+              tag={"Mesa"}
               style={{ width: 45, height: 20 }}
             />
           </Space>
@@ -130,12 +139,14 @@ const MenuSimulador = (props) => {
               type={"imageDefault"}
               label="Celula Atrição"
               src="celulas_atricao.png"
+              tag={"CelulaAtricao"}
               style={{ width: 40, height: 40 }}
             />
             <BotaoArrastavel
               type={"imageThree"}
               label="Coluna Flotação"
               src="coluna_flotacao.png"
+              tag={"CelulaFlotacao"}
               style={{ width: 20, height: 40 }}
             />
           </Space>

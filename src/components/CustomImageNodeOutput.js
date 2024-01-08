@@ -1,21 +1,24 @@
 import { Handle, Position } from "reactflow";
-import { Image } from "antd";
+import { Image, Input } from "antd";
 import React, { memo } from "react";
 
 export default memo(({ data }) => {
-  let id = 0;
-  const getId = () => `dndnode_${id++}`;
-
   return (
-    <div>
+    <div style={{ textAlign: "center", paddingBlock: "10px" }}>
       <Handle
+        className="customHandleLeft"
         type="target"
         position={Position.Left}
         isConnectable={true}
       />
       <div style={{ textAlign: "center" }}>
         <Image preview={false} src={data.image.url} style={data.image.size} />
-        <div style={{ fontSize: 8 }}>{data.label}</div>
+        <Input
+          style={{ fontSize: 8, width: 100 }}
+          value={data.label}
+          size="small"
+          bordered={false}
+        />
       </div>
     </div>
   );

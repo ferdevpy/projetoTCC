@@ -60,6 +60,80 @@ code {
   margin-top: 10px;
 }
 
+.floatingedges {
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.floatingedges .react-flow__handle {
+  opacity: 0;
+}
+
+div.customHandleLeft {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  height: 15px;
+  width: 5px;
+  /* transform: translate(-50%, 0); */
+  background: gray;
+  z-index: 1000;
+  line-height: 1;
+  border-radius: 1px;
+  color: #fff;
+  font-size: 9px;
+  border: 1px solid #222138;
+}
+div.customHandleRight {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  height: 15px;
+  width: 5px;
+  background: gray;
+  z-index: 1000;
+  line-height: 1;
+  border-radius: 1px;
+  color: #fff;
+  font-size: 9px;
+  border: 1px solid #222138;
+}
+
+div.customHandleTop {
+  content: '';
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  height: 5px;
+  width: 15px;
+  background: gray;
+  z-index: 1000;
+  line-height: 1;
+  border-radius: 1px;
+  color: #fff;
+  font-size: 9px;
+  border: 1px solid #222138;
+}
+
+div.customHandleBottom {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  height: 5px;
+  width: 15px;
+  background: gray;
+  z-index: 1000;
+  line-height: 1;
+  border-radius: 1px;
+  color: #fff;
+  font-size: 9px;
+  border: 1px solid #222138;
+}
 @media screen and (min-width: 768px) {
   .dndflow {
     flex-direction: row;

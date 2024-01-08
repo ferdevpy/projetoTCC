@@ -4,7 +4,10 @@ import { Image, Space } from "antd";
 
 const BotaoArrastavel = (props) => {
   const onDragStart = (event, nodeType, src, label) => {
-    let data = { label: label, image: { url: src, size: props.style } };
+    let data = {
+      label: label,
+      image: { url: src, size: props.style, tag: props.tag },
+    };
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.setData("application/json", JSON.stringify(data));
     event.dataTransfer.effectAllowed = "move";

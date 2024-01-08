@@ -1,7 +1,11 @@
-import React, { useState, useRef, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
 // import  { Background, Controls } from "react-flow-renderer";
 import ReactFlow, {
-  ReactFlowProvider,
   Background,
   Controls,
   addEdge,
@@ -9,6 +13,7 @@ import ReactFlow, {
   useNodesState,
   applyNodeChanges,
   applyEdgeChanges,
+  MarkerType,
 } from "reactflow";
 
 import "../index.css";
@@ -18,29 +23,62 @@ import CustomImageNodeInput from "../components/CustomImageNodeInput";
 import CustomImageNodeOutput from "../components/CustomImageNodeOutput";
 import CustomImageNodeDefault from "../components/CustomImageNodeDefault";
 import CustomImageNodeThree from "../components/CustomImageNodeThree";
+import Properties from "./Properties";
+import CustomImageNodeDefaultMoagem from "../components/CustomImageNodeDefaultMoagem";
+
+const LOCAL_STORAGE_KEY = "flowData";
 
 const Grid = (props) => {
   let id = 0;
-  const getId = () => `dndnode_${id++}`;
+  const getId = () => `${id++}`;
 
   const nodeTypes = useMemo(
     () => ({
       imageInput: CustomImageNodeInput,
       imageOutput: CustomImageNodeOutput,
       imageDefault: CustomImageNodeDefault,
-      imageThree: CustomImageNodeThree
+      imageThree: CustomImageNodeThree,
+      imageDefaultMoagem: CustomImageNodeDefaultMoagem,
     }),
     []
   );
 
   const [nodes, setNodes] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
+  const [properties, setProperties] = useState({});
+  const [update, setUpdate] = useState(true);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [tag, setTag] = useState(null);
+  const [label, setLabel] = useState(null);
+  const [openProperties, setOpenProperties] = useState(false);
+  const [idNode, setIdNode] = useState("");
+
+  useEffect(() => {
+    const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (storedData) {
+      setNodes(JSON.parse(storedData).nodes);
+      setEdges(JSON.parse(storedData).edges);
+      setProperties(JSON.parse(storedData).properties);
+    }
+  }, [update]);
+  
+  useEffect(() => {
+    let data = { nodes: nodes, edges: edges, properties: properties };
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+  }, [edges, nodes, properties]);
 
   const onConnect = useCallback(
     (params) => {
-      console.log("onConnect event:", params);
-      setEdges((eds) => addEdge(params, eds));
+      const newEdge = {
+        id: `${params.source}-${params.target}`,
+        source: params.source,
+        target: params.target,
+        type: "step",
+        // animated: true, // Adiciona um efeito animado à aresta
+        // label: 'Sua seta personalizada',
+        markerEnd: { type: MarkerType.ArrowClosed },
+      };
+      setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
   );
@@ -76,18 +114,32 @@ const Grid = (props) => {
         y: event.clientY,
       });
       const newNode = {
-        id: getId(),
+        id: `${data.image.tag}${getId()}`,
         type,
         position,
         data: data,
+        smoothStep: 0,
       };
 
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance]
   );
+
+  const onNodeClickHandle = (e, node) => {
+    setTag(node.data.image.tag);
+    setLabel(node.data.label);
+    setIdNode(node.id);
+    setOpenProperties(true);
+  };
+
+  const onCloseProperties = () => {
+    setOpenProperties(false);
+  };
+
+  console.log("properties filled", properties);
   return (
-    <div className="dndflow" style={{ width: "100%", height: 600 }}>
+    <div className="dndflow" style={{ width: "100%", height: "100vh" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -99,10 +151,22 @@ const Grid = (props) => {
         onDragOver={onDragOver}
         fitView
         nodeTypes={nodeTypes}
+        onNodeClick={onNodeClickHandle}
       >
         <Background variant="lines" gap={16} size={1} color="#eee" />
         <Controls />
       </ReactFlow>
+      <Properties
+        visible={openProperties}
+        onCloseProperties={onCloseProperties}
+        tag={tag}
+        label={label}
+        update={update}
+        idNode={idNode}
+        nodes={nodes}
+        edged={edges}
+        propertiesData={properties}
+      />
     </div>
   );
 };

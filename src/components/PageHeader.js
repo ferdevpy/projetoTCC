@@ -1,17 +1,47 @@
-import { Layout, Typography } from "antd";
+import { Layout, Typography, Image, Space } from "antd";
 const { Header } = Layout;
 const { Title } = Typography;
 const PageHeader = () => {
   return (
     <Header
       style={{
-        justifyContent: "center",
+        position: "sticky",
+        top: 0,
+        zIndex: 1,
+        width: "100%",
+        display: "flex",
         alignItems: "center",
-        justifyItems: "center",
+        backgroundColor: "orange",
+        height: "60px",
+        textAlign: "center",
       }}
     >
-      <Title level={3} color="#FFFFFF">
-        {" "}
+      <Image
+        src="logo.png"
+        style={{
+          alignContent: "center",
+          flexWrap: "wrap",
+          position: "relative",
+          placeContent: "center",
+          display: "flex",
+        }}
+        height={55}
+        preview={false}
+      />
+      <Title
+        level={3}
+        title="Plant Simulator"
+        style={{
+          top: "-10%",
+          left: "40%",
+          alignContent: "center",
+          flexWrap: "wrap",
+          position: "relative",
+          placeContent: "center",
+          display: "flex",
+          color: "#FFFFFF",
+        }}
+      >
         Plant Simulator
       </Title>
     </Header>
