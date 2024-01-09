@@ -7,10 +7,9 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Grid from "./conteiners/Grid";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Content, Footer } from "antd/es/layout/layout";
+import Rodape from "./components/Rodape";
 
-// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
-const { Content } = Layout;
 class App extends Component {
   render() {
     return (
@@ -26,6 +25,9 @@ class App extends Component {
                 </Routes>
               </Router>
             </Content>
+            <Footer style={{textAlign: 'center', height: 80}}>
+              <Rodape />
+            </Footer>
           </Layout>
         </DndProvider>
       </Layout>

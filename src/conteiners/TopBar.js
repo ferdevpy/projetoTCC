@@ -29,7 +29,7 @@ const TopBar = () => {
       children: [
         collapsed ? (
           <Space direction="horizontal">
-            <CustomUploadButton/>
+            <CustomUploadButton />
             <div style={{ textAlign: "center" }}>
               <ExportOutlined
                 size={"large"}
@@ -56,7 +56,12 @@ const TopBar = () => {
 
   return (
     <div>
-      <Tabs items={items} onChange={handleTabChange} style={{ padding: 10 }} />
+      <Tabs
+        items={items}
+        onChange={handleTabChange}
+        type="card"
+        style={{ padding: 10 }}
+      />
       {
         <div
           style={{ position: "absolute", top: 60, right: 0, padding: "10px" }}

@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-} from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 // import  { Background, Controls } from "react-flow-renderer";
 import ReactFlow, {
   Background,
@@ -43,29 +38,43 @@ const Grid = (props) => {
     []
   );
 
-  const [nodes, setNodes] = useNodesState([]);
-  const [edges, setEdges] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [properties, setProperties] = useState({});
   const [update, setUpdate] = useState(true);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [tag, setTag] = useState(null);
   const [label, setLabel] = useState(null);
   const [openProperties, setOpenProperties] = useState(false);
+  const [editing, setEditing] = useState(true);
   const [idNode, setIdNode] = useState("");
+  // const [updateNodes, setUpdateNodes] = useState(
+  //   localStorage.getItem("updateNodes")
+  // );
+
+  // useEffect(() => {
+  //   const properties = JSON.parse(localStorage.getItem("properties"));
+  //   if (properties) {
+  //     let nodestest = nodes.map((nds) => {
+  //       if (nds.id in properties) {
+  //         nds.data.label = properties[nds.id].nome;
+  //         return nds;
+  //       } else {
+  //         return nds;
+  //       }
+  //     });
+  //     setNodes(nodestest);
+  //     setProperties(properties);
+  //     setElements(nodestest);
+  //   }
+  // }, [update]);
 
   useEffect(() => {
-    const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (storedData) {
-      setNodes(JSON.parse(storedData).nodes);
-      setEdges(JSON.parse(storedData).edges);
-      setProperties(JSON.parse(storedData).properties);
+    if (editing) {
+      let data = { nodes: nodes, edges: edges };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
     }
-  }, [update]);
-  
-  useEffect(() => {
-    let data = { nodes: nodes, edges: edges, properties: properties };
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-  }, [edges, nodes, properties]);
+  }, [edges, nodes]);
 
   const onConnect = useCallback(
     (params) => {
@@ -83,15 +92,6 @@ const Grid = (props) => {
     [setEdges]
   );
 
-  const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    []
-  );
-
-  const onEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    []
-  );
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -120,24 +120,32 @@ const Grid = (props) => {
         data: data,
         smoothStep: 0,
       };
-
+      setEditing(true);
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance]
   );
 
   const onNodeClickHandle = (e, node) => {
-    setTag(node.data.image.tag);
-    setLabel(node.data.label);
-    setIdNode(node.id);
-    setOpenProperties(true);
+    setEditing(false);
+    let nodesData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)).nodes;
+    setNodes(nodesData);
+    nodesData.map((nds) => {
+      if (node.id === nds.id) {
+        setTag(nds.data.image.tag);
+        setLabel(nds.data.label);
+        setIdNode(nds.id);
+        setOpenProperties(true);
+      }
+    });
+
   };
 
   const onCloseProperties = () => {
     setOpenProperties(false);
   };
 
-  console.log("properties filled", properties);
+
   return (
     <div className="dndflow" style={{ width: "100%", height: "100vh" }}>
       <ReactFlow
@@ -150,11 +158,12 @@ const Grid = (props) => {
         onDrop={onDrop}
         onDragOver={onDragOver}
         fitView
+        elementsSelectable
         nodeTypes={nodeTypes}
         onNodeClick={onNodeClickHandle}
       >
         <Background variant="lines" gap={16} size={1} color="#eee" />
-        <Controls />
+        <Controls position="top" />
       </ReactFlow>
       <Properties
         visible={openProperties}
@@ -162,6 +171,7 @@ const Grid = (props) => {
         tag={tag}
         label={label}
         update={update}
+        setUpdate={setUpdate}
         idNode={idNode}
         nodes={nodes}
         edged={edges}

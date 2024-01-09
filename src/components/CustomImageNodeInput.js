@@ -2,15 +2,26 @@ import React, { memo } from "react";
 import { Handle, Position } from "reactflow";
 import { Image, Space, Input } from "antd";
 
-export default memo(({ data }) => {
-  const generateId = (() => {
-    let count = 0;
-
-    return () => {
-      count += 1;
-      return `inputid_${count}`;
-    };
-  })();
+export default memo(({ data, id }) => {
+  const handleLabelChange = (e) => {
+    const flowData = JSON.parse(localStorage.getItem("flowData"));
+    if (flowData.nodes) {
+      let newNodesData = flowData.nodes.map((nds) => {
+        if (nds.id === id) {
+          localStorage.setItem(
+            id+"labelUpdate",
+            JSON.stringify({ id: id, label: e.target.value })
+          );
+          nds.data.label = e.target.value;
+          return nds;
+        } else {
+          return nds;
+        }
+      });
+      flowData.nodes = newNodesData;
+      localStorage.setItem("flowData", JSON.stringify(flowData));
+    }
+  };
   return (
     <div>
       <div style={{ textAlign: "center", paddingBlock: "10px" }}>
@@ -18,9 +29,10 @@ export default memo(({ data }) => {
           <Image preview={false} src={data.image.url} style={data.image.size} />
           <Input
             style={{ fontSize: 8, width: 100 }}
-            value={data.label}
+            defaultValue={data.label}
             size="small"
             bordered={false}
+            onPressEnter={handleLabelChange}
           />
         </Space>
       </div>

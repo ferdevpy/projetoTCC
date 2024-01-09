@@ -13,49 +13,37 @@ const Properties = (props) => {
         ? props.propertiesData[props.idNode]
         : {}
     );
-    formProperties.getFieldsValue();
   }, [props.idNode]);
 
+  const savePropertie = () => {
+    let properties = props.propertiesData;
+    properties[props.idNode] = formProperties.getFieldsValue();
+    // props.setProperties(properties);
+    console.log(properties);
+    props.setUpdate(!props.update);
+    localStorage.setItem("properties", JSON.stringify(properties));
+  };
   const handleSaveProperties = () => {
+    console.log("salvando");
     formProperties
       .validateFields()
-      .then((values) => {
-        let properties = props.propertiesData;
-        properties[props.idNode] = formProperties.getFieldsValue();
-        props.setProperties(properties);
-        let nodes = updateValues(properties);
-        let flowData = {
-          properties: properties,
-          nodes: nodes,
-          edges: props.edges,
-        };
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(flowData));
+      .then(() => {
+        savePropertie();
       })
-      .catch((errorInfo) => {});
-  };
-
-  const updateValues = (properties) => {
-    if (props.nodes) {
-      let teste = props.nodes.map((no) => {
-        let nodeData = no;
-        if (properties[no.id] !== undefined) {
-          nodeData.data.label = properties[no.id].nome;
-          console.log("entrou propertie");
-        }
-
-        return nodeData;
+      .catch((error) => {
+        console.log(error);
       });
-    }
   };
+
   const propertiesObjects = {
     Moinho: (
       <Form size="small" form={formProperties}>
         <Form.Item label={"WI"}>
           <InputNumber />
         </Form.Item>
-        <Form.Item label={"Nome"} name={"nome"} rules={[{ required: true }]}>
+        {/* <Form.Item label={"Nome"} name={"nome"} rules={[{ required: true }]}>
           <Input />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           label={"% Sólidos"}
           name={"porcentagemSolidos"}
@@ -90,9 +78,9 @@ const Properties = (props) => {
         <Form.Item label={"WI"}>
           <InputNumber />
         </Form.Item>
-        <Form.Item label={"Nome"} name={"nome"} rules={[{ required: true }]}>
+        {/* <Form.Item label={"Nome"} name={"nome"} rules={[{ required: true }]}>
           <Input />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           label={"% Sólidos"}
           name={"porcentagemSolidos"}
@@ -130,7 +118,7 @@ const Properties = (props) => {
   };
   return (
     <Drawer
-      title={"Propriedades " + props.label}
+      title={`Propriedades ${props.label}`}
       autoFocus={false}
       onClose={onCloseProperties}
       open={props.visible}

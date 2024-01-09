@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import { Handle, Position } from "reactflow";
 import { Image, Input, Space } from "antd";
-import { getProperties } from "../conteiners/Properties";
+
 
 export default memo(({ data }) => {
   return (
@@ -14,17 +14,17 @@ export default memo(({ data }) => {
             className="customHandleTop"
           />
           <Image preview={false} src={data.image.url} style={data.image.size} />
+          <Input
+            style={{ fontSize: 8, width: 100 }}
+            defaultValue={data.label}
+            size="small"
+            bordered={false}
+          />
           <Handle
             className="customHandleBottom"
             type="source"
             position={Position.Bottom}
             onConnect={(params) => console.log("handle onConnect", params)}
-          />
-          <Input
-            style={{ fontSize: 8, width: 100 }}
-            value={data.label}
-            size="small"
-            bordered={false}
           />
         </Space>
       </div>
