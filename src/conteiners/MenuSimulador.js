@@ -1,10 +1,91 @@
 import { Space, Col, Row } from "antd";
-
+import {
+  ExportOutlined,
+  FileAddOutlined,
+  FolderOpenOutlined,
+} from "@ant-design/icons";
 import BotaoArrastavel from "../components/BotaoArrastavel";
+import CustomUploadButton from "../components/CustomUploadButtom";
+import { saveAs } from "file-saver";
+const LOCAL_STORAGE_KEY = "flowData";
 
 const MenuSimulador = (props) => {
+  const handleDownloadJson = () => {
+    const jsonContent = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    saveAs(blob, "fluxogramaUsina.json");
+  };
+
+  const handleFileChange = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    const fileInput = document.getElementById("file-input");
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = function () {
+      const jsonData = JSON.parse(reader.result);
+      const jsonStr = JSON.stringify(jsonData);
+      // Salvar a string JSON no Local Storage
+      localStorage.setItem(LOCAL_STORAGE_KEY, jsonStr);
+      window.location.reload();
+      console.log("Arquivo JSON enviado com sucesso!");
+    };
+    reader.readAsText(file);
+  };
+  const handleNewProject = () => {
+    let data = { nodes: [], edges: [] };
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+    window.location.reload();
+  };
+  console.log(props);
   return (
     <Row gutter={20} style={{ marginLeft: 15 }}>
+      <div style={{ textAlign: "left" }}>
+        <Col
+          style={{
+            borderRight: "1px solid #ddd",
+            height: 100,
+            textAlign: "left",
+          }}
+        >
+          <Space direction="vertical">
+            <div>
+              <label
+                htmlFor="file-input"
+                style={{ fontSize: 12, display: "inline-block" }}
+              >
+                <FolderOpenOutlined
+                  style={{ marginRight: "8px", fontSize: "25px" }}
+                />
+                Importar
+              </label>
+              <input
+                type="file"
+                id="file-input"
+                accept=".json"
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+            </div>
+            <div>
+              <ExportOutlined
+                size={"large"}
+                style={{ marginRight: "8px", fontSize: 25 }}
+                onClick={handleDownloadJson}
+              />
+              <span style={{ fontSize: 12 }}>Exportar</span>
+            </div>
+            <div>
+              <FileAddOutlined
+                size={"large"}
+                style={{ marginRight: "8px", fontSize: 25 }}
+                onClick={handleNewProject}
+              />
+              <span style={{ fontSize: 12 }}>Novo</span>
+            </div>
+          </Space>
+        </Col>
+        <div style={{ fontSize: 12, textAlign: "center" }}>Projeto</div>
+      </div>
       <div style={{ textAlign: "left" }}>
         <Col
           style={{
@@ -80,7 +161,7 @@ const MenuSimulador = (props) => {
               type={"imageDefaultMoagem"}
               label="Moinho de bolas"
               src="moinho_bolas.png"
-              tag={"Moinho"}
+              tag={"MoinhoBolas"}
               style={{ width: 40, height: 40 }}
             />
           </Space>

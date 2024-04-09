@@ -20,6 +20,8 @@ import CustomImageNodeDefault from "../components/CustomImageNodeDefault";
 import CustomImageNodeThree from "../components/CustomImageNodeThree";
 import Properties from "./Properties";
 import CustomImageNodeDefaultMoagem from "../components/CustomImageNodeDefaultMoagem";
+import CustomUploadButton from "../components/CustomUploadButtom";
+import MenuSimulador from "./MenuSimulador";
 
 const LOCAL_STORAGE_KEY = "flowData";
 
@@ -38,36 +40,47 @@ const Grid = (props) => {
     []
   );
 
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [properties, setProperties] = useState({});
+  const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes || []);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges || []);
+  const [properties, setProperties] = useState(props.properties || {});
   const [update, setUpdate] = useState(true);
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState();
   const [tag, setTag] = useState(null);
   const [label, setLabel] = useState(null);
   const [openProperties, setOpenProperties] = useState(false);
   const [editing, setEditing] = useState(true);
   const [idNode, setIdNode] = useState("");
-  // const [updateNodes, setUpdateNodes] = useState(
-  //   localStorage.getItem("updateNodes")
-  // );
+  const [flowData, setFlowData] = useState(
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {}
+  );
 
-  // useEffect(() => {
-  //   const properties = JSON.parse(localStorage.getItem("properties"));
-  //   if (properties) {
-  //     let nodestest = nodes.map((nds) => {
-  //       if (nds.id in properties) {
-  //         nds.data.label = properties[nds.id].nome;
-  //         return nds;
-  //       } else {
-  //         return nds;
-  //       }
-  //     });
-  //     setNodes(nodestest);
-  //     setProperties(properties);
-  //     setElements(nodestest);
-  //   }
-  // }, [update]);
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === LOCAL_STORAGE_KEY) {
+        const novoObjeto = JSON.parse(event.newValue);
+        // Comparar o novo objeto com o estado atual
+        if (JSON.stringify(novoObjeto) !== JSON.stringify(flowData)) {
+          console.log("O objeto JSON foi alterado:", novoObjeto);
+          setFlowData(novoObjeto);
+        }
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [flowData]);
+
+  useEffect(() => {
+    if (flowData) {
+      console.log(flowData);
+      setNodes(flowData.nodes);
+      setEdges(flowData.edges);
+      setProperties(flowData.properties);
+    }
+  }, [flowData]);
 
   useEffect(() => {
     if (editing) {
@@ -91,7 +104,6 @@ const Grid = (props) => {
     },
     [setEdges]
   );
-
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -138,13 +150,12 @@ const Grid = (props) => {
         setOpenProperties(true);
       }
     });
-
   };
 
   const onCloseProperties = () => {
     setOpenProperties(false);
   };
-
+  console.log(nodes);
 
   return (
     <div className="dndflow" style={{ width: "100%", height: "100vh" }}>
@@ -154,7 +165,7 @@ const Grid = (props) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onInit={setReactFlowInstance}
+        onInit={(instance) => setReactFlowInstance(instance)}
         onDrop={onDrop}
         onDragOver={onDragOver}
         fitView

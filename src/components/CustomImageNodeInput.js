@@ -9,7 +9,7 @@ export default memo(({ data, id }) => {
       let newNodesData = flowData.nodes.map((nds) => {
         if (nds.id === id) {
           localStorage.setItem(
-            id+"labelUpdate",
+            id + "labelUpdate",
             JSON.stringify({ id: id, label: e.target.value })
           );
           nds.data.label = e.target.value;
@@ -24,24 +24,16 @@ export default memo(({ data, id }) => {
   };
   return (
     <div>
-      <div style={{ textAlign: "center", paddingBlock: "10px" }}>
-        <Space direction={"vertical"} size={"small"}>
-          <Image preview={false} src={data.image.url} style={data.image.size} />
-          <Input
-            style={{ fontSize: 8, width: 100 }}
-            defaultValue={data.label}
-            size="small"
-            bordered={false}
-            onPressEnter={handleLabelChange}
-          />
-        </Space>
+      <div style={{ textAlign: "center" }}>
+        <Image preview={false} src={data.image.url} style={data.image.size} />
+
+        <Handle
+          type="source"
+          className="customHandleRight"
+          position={Position.Right}
+          isConnectable={true}
+        />
       </div>
-      <Handle
-        type="source"
-        className="customHandleRight"
-        position={Position.Right}
-        isConnectable={true}
-      />
     </div>
   );
 });

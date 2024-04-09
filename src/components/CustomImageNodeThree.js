@@ -10,10 +10,7 @@ export default memo(({ data }) => {
         position={Position.Left}
         className="customHandleLeft"
       />
-      <div style={{ textAlign: "center" }}>
-        <Image preview={false} src={data.image.url} style={data.image.size} />
-        <div style={{ fontSize: 8 }}>{data.label}</div>
-      </div>
+      <Image preview={false} src={data.image.url} style={data.image.size} />
       <Handle
         type="source"
         position={Position.Right}

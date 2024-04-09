@@ -1,40 +1,37 @@
-import React from "react";
-import { Upload, message } from "antd";
+import React, { useEffect, useState } from "react";
 import { FolderOpenOutlined } from "@ant-design/icons";
+import { type } from "@testing-library/user-event/dist/type";
 const LOCAL_STORAGE_KEY = "flowData";
-const CustomUploadButton = () => {
-  const props = {
-    beforeUpload: (file) => {
-      // Sua lógica existente para verificar o arquivo
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const base64Data = e.target.result;
-        localStorage.setItem(LOCAL_STORAGE_KEY, base64Data);
-
-        alert("Arquivo carregado com sucesso!");
-      };
-
-      reader.readAsText(file);
-
-      // Retornar false para evitar o envio padrão do Ant Design
-      return false;
-    },
-    onChange: (info) => {
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} enviado com sucesso`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} falhou ao enviar`);
-      }
-    },
+const CustomUploadButton = (props) => {
+  const handleFileChange = () => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    const fileInput = document.getElementById("file-input");
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = function () {
+      const jsonData = JSON.parse(reader.result);
+      const jsonStr = JSON.stringify(jsonData);
+      // Salvar a string JSON no Local Storage
+      localStorage.setItem(LOCAL_STORAGE_KEY, jsonStr);
+      window.location.reload();
+      console.log("Arquivo JSON enviado com sucesso!");
+    };
+    reader.readAsText(file);
   };
 
   return (
-    <Upload {...props} showUploadList={false}>
-      <div style={{ textAlign: "center" }}>
-        <FolderOpenOutlined size="large" style={{ fontSize: 20 }} />
-        <div style={{ fontSize: 12 }}>Abrir Projeto</div>
-      </div>
-    </Upload>
+    <div tyle={{ textAlign: "center" }}>
+      <label htmlFor="file-input" style={{ display: "inline-block" }}>
+        <FolderOpenOutlined style={{ marginRight: "8px", fontSize: 25 }} />
+      </label>
+      <input
+        type="file"
+        id="file-input"
+        accept=".json"
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+    </div>
   );
 };
 
