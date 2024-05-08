@@ -18,6 +18,8 @@ import CustomImageNodeDefault from "../components/CustomImageNodeDefault";
 import CustomImageNodeThree from "../components/CustomImageNodeThree";
 import Properties from "./Properties";
 import CustomImageNodeDefaultMoagem from "../components/CustomImageNodeDefaultMoagem";
+import { FloatButton, Button } from "antd";
+import FloatPlay from "./FloatPlay";
 
 const LOCAL_STORAGE_KEY = "flowData";
 
@@ -158,6 +160,7 @@ const Grid = (props) => {
 
   return (
     <div className="dndflow" style={{ width: "100%", height: "100vh" }}>
+      <FloatPlay />
       <ReactFlow
         nodes={nodes}
         edges={edges}
