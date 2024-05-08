@@ -96,15 +96,19 @@ div.customHandleRight {
   content: '';
   position: absolute;
   top: 50%;
-  height: 10px;
-  width: 0!important;
-  background: gray;
+  width: 8px;
+  height: 8px;
+  right: -30%;
+  border-width: 4px;
+  border-style: solid;
+  border-left-color: black;
+  color: transparent;
+  border-radius: 0%;
   z-index: 1000;
-  line-height: 1;
-  border-radius: 1px;
-  color: #fff;
-  font-size: 9px;
-  border: 1px solid #222138;
+  background-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
 }
 
 div.customHandleTop {
@@ -126,15 +130,20 @@ div.customHandleBottom {
   content: '';
   position: absolute;
   left: 50%;
-  height: 0!important;
-  width: 10px;
-  background: gray;
+  bottom: -22%;
+  width: 8px;
+  height: 8px;
+  border-width: 4px;
+  border-style: solid;
+  border-top-color: black;
+  color: transparent;
+  border-radius: 0%;
   z-index: 1000;
-  line-height: 1;
-  border-radius: 1px;
-  color: #fff;
-  font-size: 9px;
-  border: 1px solid #222138;
+  background-color: transparent;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  
 }
 @media screen and (min-width: 768px) {
   .dndflow {

@@ -1,6 +1,6 @@
 // BotaoArrastavel.js
 import React from "react";
-import { Image, Space } from "antd";
+import { Image, Tooltip } from "antd";
 
 const BotaoArrastavel = (props) => {
   const onDragStart = (event, nodeType, src, label) => {
@@ -22,10 +22,9 @@ const BotaoArrastavel = (props) => {
       style={{ cursor: "grab" }}
     >
       <div>
-        <Space direction="horizontal">
+        <Tooltip title={props.label}>
           <Image preview={false} src={props.src} style={props.style} />
-          <div style={{ fontSize: 12 }}>{props.label}</div>
-        </Space>
+        </Tooltip>
       </div>
     </div>
   );

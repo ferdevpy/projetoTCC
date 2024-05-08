@@ -4,7 +4,7 @@ import { Image } from "antd";
 
 export default memo(({ data }) => {
   return (
-    <div style={{ textAlign: "center", paddingBlock: "10px" }}>
+    <div style={{ textAlign: "center" }}>
       <Handle
         type="target"
         position={Position.Left}

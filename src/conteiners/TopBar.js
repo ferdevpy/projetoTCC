@@ -36,7 +36,12 @@ const TopBar = () => {
       />
       {
         <div
-          style={{ position: "absolute", top: 60, right: 0, padding: "10px" }}
+          style={{
+            position: "absolute",
+            top: 60,
+            right: 0,
+            padding: "10px",
+          }}
         >
           <Button
             size="small"

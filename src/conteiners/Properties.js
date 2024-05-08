@@ -21,7 +21,10 @@ const Properties = (props) => {
     // props.setProperties(properties);
     console.log(properties);
     props.setUpdate(!props.update);
-    localStorage.setItem("properties", JSON.stringify(properties));
+    let storageAnterior = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    storageAnterior.properties = properties;
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storageAnterior));
+    window.location.reload();
   };
   const handleSaveProperties = () => {
     console.log("salvando");

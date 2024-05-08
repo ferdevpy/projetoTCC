@@ -1,11 +1,10 @@
-import { Space, Col, Row } from "antd";
+import { Space, Col, Row, Tooltip } from "antd";
 import {
   ExportOutlined,
   FileAddOutlined,
   FolderOpenOutlined,
 } from "@ant-design/icons";
 import BotaoArrastavel from "../components/BotaoArrastavel";
-import CustomUploadButton from "../components/CustomUploadButtom";
 import { saveAs } from "file-saver";
 const LOCAL_STORAGE_KEY = "flowData";
 
@@ -32,70 +31,76 @@ const MenuSimulador = (props) => {
     reader.readAsText(file);
   };
   const handleNewProject = () => {
-    let data = { nodes: [], edges: [] };
+    let data = { nodes: [], edges: [], properties: {} };
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
     window.location.reload();
   };
   console.log(props);
   return (
     <Row gutter={20} style={{ marginLeft: 15 }}>
-      <div style={{ textAlign: "left" }}>
+      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{
-            borderRight: "1px solid #ddd",
-            height: 100,
-            textAlign: "left",
+            width: "auto",
+            height: 50,
+            borderBottom: "1px solid #ddd",
+            textAlign: "center",
+            paddingInline: "10px",
           }}
         >
-          <Space direction="vertical">
-            <div>
-              <label
-                htmlFor="file-input"
-                style={{ fontSize: 12, display: "inline-block" }}
-              >
-                <FolderOpenOutlined
-                  style={{ marginRight: "8px", fontSize: "25px" }}
+          <Space direction="inline" size={"middle"}>
+            <Tooltip title="Importar projeto">
+              <div>
+                <label
+                  htmlFor="file-input"
+                  style={{ fontSize: 12, display: "inline-block" }}
+                >
+                  <FolderOpenOutlined
+                    style={{ marginRight: "8px", fontSize: "25px" }}
+                  />
+                </label>
+                <input
+                  type="file"
+                  id="file-input"
+                  accept=".json"
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
                 />
-                Importar
-              </label>
-              <input
-                type="file"
-                id="file-input"
-                accept=".json"
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-              />
+              </div>
+            </Tooltip>
+            <div>
+              <Tooltip title="Exportar projeto">
+                <ExportOutlined
+                  size={"large"}
+                  style={{ marginRight: "8px", fontSize: 25 }}
+                  onClick={handleDownloadJson}
+                />
+              </Tooltip>
             </div>
             <div>
-              <ExportOutlined
-                size={"large"}
-                style={{ marginRight: "8px", fontSize: 25 }}
-                onClick={handleDownloadJson}
-              />
-              <span style={{ fontSize: 12 }}>Exportar</span>
-            </div>
-            <div>
-              <FileAddOutlined
-                size={"large"}
-                style={{ marginRight: "8px", fontSize: 25 }}
-                onClick={handleNewProject}
-              />
-              <span style={{ fontSize: 12 }}>Novo</span>
+              <Tooltip title="Novo Projeto">
+                <FileAddOutlined
+                  size={"large"}
+                  style={{ marginRight: "8px", fontSize: 25 }}
+                  onClick={handleNewProject}
+                />
+              </Tooltip>
             </div>
           </Space>
         </Col>
         <div style={{ fontSize: 12, textAlign: "center" }}>Projeto</div>
       </div>
-      <div style={{ textAlign: "left" }}>
+      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{
-            borderRight: "1px solid #ddd",
-            height: 100,
-            width: 150,
-            textAlign: "left",
+            width: "auto",
+            height: 50,
+            borderBottom: "1px solid #ddd",
+            textAlign: "center",
+            paddingInline: "10px",
           }}
         >
-          <Space direction="vertical">
+          <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               src={"alimentacao.png"}
               label={"Alimentação"}
@@ -114,15 +119,17 @@ const MenuSimulador = (props) => {
         </Col>
         <div style={{ fontSize: 12 }}>Alimentação</div>
       </div>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{
-            borderRight: "1px solid #ddd",
-            height: 100,
-            textAlign: "left",
+            width: "auto",
+            height: 50,
+            borderBottom: "1px solid #ddd",
+            textAlign: "center",
+            paddingInline: "10px",
           }}
         >
-          <Space direction="vertical">
+          <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               src={"britador_mandibula.png"}
               label={"Britador de mandibula"}
@@ -132,24 +139,40 @@ const MenuSimulador = (props) => {
             />
             <BotaoArrastavel
               src={"britador_giratorio.png"}
-              label={"Britador giratorio"}
+              label={"Britador giratório"}
               type={"imageDefault"}
-              tag={"Britador"}
+              tag={"BritadorGiratorio"}
               style={{ width: 40, height: 40 }}
+            />
+            <BotaoArrastavel
+              src={"Grelha.png"}
+              label={"Grelha"}
+              type={"imageThree"}
+              tag={"Grelha"}
+              style={{ width: 40, height: 40 }}
+            />
+                        <BotaoArrastavel
+              src={"Peneira.png"}
+              label={"Peneira"}
+              type={"imageThree"}
+              tag={"Peneira"}
+              style={{ width: 40, height: 30 }}
             />
           </Space>
         </Col>
         <div style={{ fontSize: 12 }}>Britagem</div>
       </div>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{
-            borderRight: "1px solid #ddd",
-            height: 100,
-            textAlign: "left",
+            width: "auto",
+            height: 50,
+            borderBottom: "1px solid #ddd",
+            textAlign: "center",
+            paddingInline: "10px",
           }}
         >
-          <Space direction="vertical">
+          <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               src={"moinho_barras.png"}
               label={"Moinho de Barras"}
@@ -168,54 +191,47 @@ const MenuSimulador = (props) => {
         </Col>
         <div style={{ fontSize: 12 }}>Moagem</div>
       </div>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{
-            borderRight: "1px solid #ddd",
-            height: 100,
-            width: 250,
-            textAlign: "left",
+            width: "auto",
+            height: 50,
+            borderBottom: "1px solid #ddd",
+            textAlign: "center",
+            paddingInline: "10px",
           }}
         >
-          <Space direction="vertical" wrap>
-            <Space direction="horizontal">
-              <BotaoArrastavel
-                type={"imageDefault"}
-                label="Espiral Classificadora"
-                src="espiral_classificadora.png"
-                tag={"Espiral"}
-                style={{ width: 20, height: 40 }}
-              />
-
-              <BotaoArrastavel
-                type={"imageThree"}
-                label="Hidrociclone"
-                src="hidrociclone.png"
-                tag={"Hidrociclone"}
-                style={{ width: 20, height: 40 }}
-              />
-            </Space>
+          <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               type={"imageDefault"}
-              label="Mesa Vibratória"
-              src="mesa_vibratoria.png"
-              tag={"Mesa"}
-              style={{ width: 45, height: 20 }}
+              label="Espiral Classificadora"
+              src="espiral_classificadora.png"
+              tag={"Espiral"}
+              style={{ width: 20, height: 40 }}
+            />
+
+            <BotaoArrastavel
+              type={"imageThree"}
+              label="Hidrociclone"
+              src="hidrociclone.png"
+              tag={"Hidrociclone"}
+              style={{ width: 40, height: 40 }}
             />
           </Space>
         </Col>
         <div style={{ fontSize: 12 }}>Classificação</div>
       </div>
-      <div style={{ textAlign: "center" }}>
+      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{
-            borderRight: "1px solid #ddd",
-            height: 100,
-            width: 200,
-            textAlign: "left",
+            width: "auto",
+            height: 50,
+            borderBottom: "1px solid #ddd",
+            textAlign: "center",
+            paddingInline: "10px",
           }}
         >
-          <Space direction="vertical" wrap>
+          <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               type={"imageDefault"}
               label="Celula Atrição"

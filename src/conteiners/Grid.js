@@ -84,7 +84,7 @@ const Grid = (props) => {
 
   useEffect(() => {
     if (editing) {
-      let data = { nodes: nodes, edges: edges };
+      let data = { nodes: nodes, edges: edges, properties: properties };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
     }
   }, [edges, nodes]);
