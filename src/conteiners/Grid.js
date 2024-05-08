@@ -6,8 +6,6 @@ import ReactFlow, {
   addEdge,
   useEdgesState,
   useNodesState,
-  applyNodeChanges,
-  applyEdgeChanges,
   MarkerType,
 } from "reactflow";
 
@@ -20,8 +18,6 @@ import CustomImageNodeDefault from "../components/CustomImageNodeDefault";
 import CustomImageNodeThree from "../components/CustomImageNodeThree";
 import Properties from "./Properties";
 import CustomImageNodeDefaultMoagem from "../components/CustomImageNodeDefaultMoagem";
-import CustomUploadButton from "../components/CustomUploadButtom";
-import MenuSimulador from "./MenuSimulador";
 
 const LOCAL_STORAGE_KEY = "flowData";
 
@@ -91,9 +87,12 @@ const Grid = (props) => {
 
   const onConnect = useCallback(
     (params) => {
+      console.log(params);
       const newEdge = {
-        id: `${params.source}-${params.target}`,
+        id: `${params.source}_${params.sourceHandle}-${params.target}_${params.targetHandle}`,
         source: params.source,
+        sourceHandle: params.sourceHandle,
+        targetHandle: params.targetHandle,
         target: params.target,
         type: "step",
         // animated: true, // Adiciona um efeito animado à aresta

@@ -151,7 +151,7 @@ const MenuSimulador = (props) => {
               tag={"Grelha"}
               style={{ width: 40, height: 40 }}
             />
-                        <BotaoArrastavel
+            <BotaoArrastavel
               src={"Peneira.png"}
               label={"Peneira"}
               type={"imageThree"}
@@ -175,7 +175,7 @@ const MenuSimulador = (props) => {
           <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               src={"moinho_barras.png"}
-              label={"Moinho de Barras"}
+              label={"Moinho SAG"}
               type={"imageDefaultMoagem"}
               tag={"Moinho"}
               style={{ width: 40, height: 30 }}
@@ -186,6 +186,20 @@ const MenuSimulador = (props) => {
               src="moinho_bolas.png"
               tag={"MoinhoBolas"}
               style={{ width: 40, height: 40 }}
+            />
+            <BotaoArrastavel
+              type={"imageThree"}
+              label="Hidrociclone"
+              src="hidrociclone.png"
+              tag={"Hidrociclone"}
+              style={{ width: 40, height: 40 }}
+            />
+            <BotaoArrastavel
+              src={"Peneira.png"}
+              label={"Peneira"}
+              type={"imageThree"}
+              tag={"Peneira"}
+              style={{ width: 40, height: 30 }}
             />
           </Space>
         </Col>
@@ -204,39 +218,16 @@ const MenuSimulador = (props) => {
           <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               type={"imageDefault"}
-              label="Espiral Classificadora"
+              label="Espiral Concentradora"
               src="espiral_classificadora.png"
               tag={"Espiral"}
               style={{ width: 20, height: 40 }}
             />
-
-            <BotaoArrastavel
-              type={"imageThree"}
-              label="Hidrociclone"
-              src="hidrociclone.png"
-              tag={"Hidrociclone"}
-              style={{ width: 40, height: 40 }}
-            />
-          </Space>
-        </Col>
-        <div style={{ fontSize: 12 }}>Classificação</div>
-      </div>
-      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
-        <Col
-          style={{
-            width: "auto",
-            height: 50,
-            borderBottom: "1px solid #ddd",
-            textAlign: "center",
-            paddingInline: "10px",
-          }}
-        >
-          <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               type={"imageDefault"}
-              label="Celula Atrição"
+              label="Celula Convencional"
               src="celulas_atricao.png"
-              tag={"CelulaAtricao"}
+              tag={"CelulaConvencional"}
               style={{ width: 40, height: 40 }}
             />
             <BotaoArrastavel
@@ -248,7 +239,7 @@ const MenuSimulador = (props) => {
             />
           </Space>
         </Col>
-        <div style={{ fontSize: 12 }}>Flotação</div>
+        <div style={{ fontSize: 12 }}>Concentração</div>
       </div>
     </Row>
   );

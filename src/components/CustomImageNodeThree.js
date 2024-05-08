@@ -7,6 +7,7 @@ export default memo(({ data }) => {
     <div style={{ textAlign: "center" }}>
       <Handle
         type="target"
+        id="input1"
         position={Position.Left}
         className="customHandleLeft"
       />
