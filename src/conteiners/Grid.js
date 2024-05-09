@@ -160,7 +160,12 @@ const Grid = (props) => {
 
   return (
     <div className="dndflow" style={{ width: "100%", height: "100vh" }}>
-      <FloatPlay />
+      <FloatPlay
+        setEdges={setEdges}
+        setNodes={setNodes}
+        nodes={nodes}
+        edges={edges}
+      />
       <ReactFlow
         nodes={nodes}
         edges={edges}

@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 
 import React, { useState, useEffect } from "react";
-const FloatPlay = () => {
+const FloatPlay = (props) => {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [timerId, setTimerId] = useState(null);
@@ -27,6 +27,12 @@ const FloatPlay = () => {
 
   const handleStart = () => {
     setIsRunning(true);
+    props.setEdges(
+      props.edges.map((edges) => {
+        edges.animated = true;
+        return edges;
+      })
+    );
   };
 
   const handlePause = () => {
