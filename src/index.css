@@ -155,3 +155,7 @@ div.customHandleBottom {
     max-width: 250px;
   }
 }
+
+.ant-form-item-row{
+  justify-content: space-between!important;
+}

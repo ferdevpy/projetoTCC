@@ -177,7 +177,7 @@ const MenuSimulador = (props) => {
               src={"moinho_barras.png"}
               label={"Moinho SAG"}
               type={"imageDefaultMoagem"}
-              tag={"Moinho"}
+              tag={"SAG"}
               style={{ width: 40, height: 30 }}
             />
             <BotaoArrastavel
