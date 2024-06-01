@@ -132,16 +132,16 @@ const MenuSimulador = (props) => {
           <Space direction="inline" size={"middle"}>
             <BotaoArrastavel
               src={"britador_mandibula.png"}
-              label={"Britador de mandibula"}
+              label={"Britagem Primária"}
               type={"imageDefault"}
-              tag={"Britador"}
+              tag={"BritagemPrimaria"}
               style={{ width: 30, height: 30 }}
             />
             <BotaoArrastavel
               src={"britador_giratorio.png"}
               label={"Britador giratório"}
               type={"imageDefault"}
-              tag={"BritadorGiratorio"}
+              tag={"BritagemSecundaria"}
               style={{ width: 40, height: 40 }}
             />
             <BotaoArrastavel
@@ -155,7 +155,7 @@ const MenuSimulador = (props) => {
               src={"Peneira.png"}
               label={"Peneira"}
               type={"imageThree"}
-              tag={"Peneira"}
+              tag={"Peneiramento"}
               style={{ width: 40, height: 30 }}
             />
           </Space>
@@ -184,7 +184,7 @@ const MenuSimulador = (props) => {
               type={"imageDefaultMoagem"}
               label="Moinho de bolas"
               src="moinho_bolas.png"
-              tag={"MoinhoBolas"}
+              tag={"Moagem"}
               style={{ width: 40, height: 40 }}
             />
             <BotaoArrastavel
@@ -198,7 +198,7 @@ const MenuSimulador = (props) => {
               src={"Peneira.png"}
               label={"Peneira"}
               type={"imageThree"}
-              tag={"Peneira"}
+              tag={"Peneiramento"}
               style={{ width: 40, height: 30 }}
             />
           </Space>

@@ -18,8 +18,9 @@ import CustomImageNodeDefault from "../components/CustomImageNodeDefault";
 import CustomImageNodeThree from "../components/CustomImageNodeThree";
 import Properties from "./Properties";
 import CustomImageNodeDefaultMoagem from "../components/CustomImageNodeDefaultMoagem";
-import { FloatButton, Button } from "antd";
 import FloatPlay from "./FloatPlay";
+import { configurarCircuito } from "../scripts/MontaCircuito";
+import { calculaRetidaAndPassante } from "../scripts/FormulasBritagem";
 
 const LOCAL_STORAGE_KEY = "flowData";
 
@@ -48,9 +49,14 @@ const Grid = (props) => {
   const [openProperties, setOpenProperties] = useState(false);
   const [editing, setEditing] = useState(true);
   const [idNode, setIdNode] = useState("");
+  const [play, setPlay] = useState(false);
   const [flowData, setFlowData] = useState(
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {}
   );
+
+  // useEffect(() => {
+  // console.log(calculaRetidaAndPassante(0.9,150));
+  // }, []);
 
   useEffect(() => {
     const handleStorageChange = (event) => {
@@ -73,12 +79,19 @@ const Grid = (props) => {
 
   useEffect(() => {
     if (flowData) {
-      console.log(flowData);
       setNodes(flowData.nodes);
       setEdges(flowData.edges);
       setProperties(flowData.properties);
     }
   }, [flowData]);
+
+  useEffect(() => {
+    let circuito = configurarCircuito(properties, nodes, edges);
+    if (play) {
+      circuito.distribuirMassa(15);
+      console.log(circuito.toString());
+    }
+  }, [nodes, edges, play]);
 
   useEffect(() => {
     if (editing) {
@@ -89,7 +102,6 @@ const Grid = (props) => {
 
   const onConnect = useCallback(
     (params) => {
-      console.log(params);
       const newEdge = {
         id: `${params.source}_${params.sourceHandle}-${params.target}_${params.targetHandle}`,
         source: params.source,
@@ -156,7 +168,6 @@ const Grid = (props) => {
   const onCloseProperties = () => {
     setOpenProperties(false);
   };
-  console.log(nodes);
 
   return (
     <div className="dndflow" style={{ width: "100%", height: "100vh" }}>
@@ -165,6 +176,7 @@ const Grid = (props) => {
         setNodes={setNodes}
         nodes={nodes}
         edges={edges}
+        setPlay={setPlay}
       />
       <ReactFlow
         nodes={nodes}

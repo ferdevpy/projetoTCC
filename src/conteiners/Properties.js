@@ -7,13 +7,15 @@ import {
   Col,
   Checkbox,
   Select,
+  Tabs,
 } from "antd";
 import { useEffect, useState } from "react";
+import PropertiesBritagemPrimaria from "./PropertiesBritagemPrimaria";
 
 const LOCAL_STORAGE_KEY = "flowData";
-
 const Properties = (props) => {
   const [formProperties] = Form.useForm();
+  const [formResults] = Form.useForm();
   const [variablePower, setVariablePower] = useState(
     <>
       <InputNumber style={{ width: 100 }} />
@@ -160,47 +162,47 @@ const Properties = (props) => {
       <Form size="small" form={formProperties} {...formItemLayout}>
         <Form.Item
           style={{ textAlign: "end" }}
-          name={"f50max"}
-          label={"F50 Max"}
+          name={"porcentagemSolidos"}
+          label={"Porcentagem de Sólidos"}
         >
           <InputNumber />
         </Form.Item>
         <Form.Item
           style={{ textAlign: "end" }}
-          name={"finesTuning"}
-          label={"Fines Tuning"}
+          name={"workIndex"}
+          label={"Work Index"}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item
+          style={{ textAlign: "end" }}
+          name={"densidade"}
+          label={"Densidade"}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item
+          style={{ textAlign: "end" }}
+          name={"taxaAlimentacao"}
+          label={"Taxa de Alimentação"}
         >
           <InputNumber min={0} />
         </Form.Item>
         <Form.Item
           style={{ textAlign: "end" }}
-          name={"f50slope"}
-          label={"F50 Slope"}
-        >
-          <InputNumber />
-        </Form.Item>
-        <Form.Item
-          style={{ textAlign: "end" }}
-          name={"f50intercept"}
-          label={"F50 Intercept"}
-        >
-          <InputNumber />
-        </Form.Item>
-        <Form.Item
-          style={{ textAlign: "end" }}
-          name={"f50slope"}
-          label={"F80 Slope"}
-        >
-          <InputNumber />
-        </Form.Item>
-        <Form.Item
-          style={{ textAlign: "end" }}
-          name={"f80intercept"}
-          label={"F80 Intercept"}
+          name={"variabilidade"}
+          label={"Variabilidade"}
         >
           <InputNumber />
         </Form.Item>
       </Form>
+    ),
+    BritagemPrimaria: (
+      <PropertiesBritagemPrimaria
+        formProperties={formProperties}
+        formResults={formResults}
+        idNode={props.idNode}
+      />
     ),
     Peneira: (
       <Form size="small" form={formProperties} {...formItemLayout}>
@@ -397,6 +399,7 @@ const Properties = (props) => {
       title={`Propriedades ${props.label}`}
       autoFocus={false}
       onClose={onCloseProperties}
+      size="large"
       open={props.visible}
       maskClosable={false}
       mask={false}

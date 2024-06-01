@@ -26,6 +26,7 @@ const FloatPlay = (props) => {
   }, [isRunning]); // Executar o efeito quando o estado de isRunning mudar
 
   const handleStart = () => {
+    props.setPlay(true);
     setIsRunning(true);
     props.setEdges(
       props.edges.map((edges) => {
@@ -36,11 +37,25 @@ const FloatPlay = (props) => {
   };
 
   const handlePause = () => {
+    props.setPlay(false);
     setIsRunning(false);
+    props.setEdges(
+      props.edges.map((edges) => {
+        edges.animated = false;
+        return edges;
+      })
+    );
   };
 
   const handleStop = () => {
+    props.setPlay(false);
     setIsRunning(false);
+    props.setEdges(
+      props.edges.map((edges) => {
+        edges.animated = false;
+        return edges;
+      })
+    );
     setTimer(0);
   };
 

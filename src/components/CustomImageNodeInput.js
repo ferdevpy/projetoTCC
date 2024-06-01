@@ -25,8 +25,18 @@ export default memo(({ data, id }) => {
   return (
     <div>
       <div style={{ textAlign: "center" }}>
-        <Image preview={false} src={data.image.url} style={data.image.size} />
-
+        <div
+          style={{
+            width: "50px",
+            height: "50px",
+            display: "grid",
+            alignContent: "space-around",
+            border: "0.00000001rem ridge gray",
+            borderRadius: "4px",
+          }}
+        >
+          <Image preview={false} src={data.image.url} style={data.image.size} />
+        </div>
         <Handle
           type="source"
           className="customHandleRight"
