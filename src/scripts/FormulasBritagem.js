@@ -23,12 +23,19 @@ const calculoPDi = (ri) => {
   return -Math.pow(ri / 1.25, 0.843);
 };
 
-export function calculaRetidaAndPassante(Pt, OSS) {
+export function calculaRetidaAndPassante(Pt, OSS, massa) {
   let ku = calculoKu(Pt);
   let Pb = calculoPb(ku);
   let kl = calculoKl(Pb);
   let seriePeneiras = geraSeriePeneiras().sort((a, b) => b - a);
-  let tabela = { mm: seriePeneiras, ri: [], passantemm: [], retidamm: [] };
+  let tabela = {
+    mm: seriePeneiras,
+    ri: [],
+    passantemm: [],
+    passanteMassa: [],
+    retidamm: [],
+    retidaMassa: [],
+  };
   let i = 0;
   for (let tamanhoPeneira of seriePeneiras) {
     let ri = tamanhoPeneira / OSS;
@@ -37,15 +44,18 @@ export function calculaRetidaAndPassante(Pt, OSS) {
     if (ri > 0.5) {
       passante = calculoPDiMaior(ri, ku);
       tabela["passantemm"].push(passante);
+      tabela["passanteMassa"].push(passante * massa);
     } else {
       passante = calculoPDiMenor(ri, kl);
       tabela["passantemm"].push(passante);
+      tabela["passanteMassa"].push(passante * massa);
     }
     if (i === 0) {
       tabela["retidamm"].push(0);
     } else {
       let retida = tabela["passantemm"][i - 1] - passante;
       tabela["retidamm"].push(retida);
+      tabela["retidaMassa"].push(retida*massa);
     }
     i = i + 1;
   }

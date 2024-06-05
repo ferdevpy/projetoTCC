@@ -87,8 +87,9 @@ const Grid = (props) => {
 
   useEffect(() => {
     let circuito = configurarCircuito(properties, nodes, edges);
+    // console.log(circuito.toString());
     if (play) {
-      circuito.distribuirMassa(15);
+      circuito.distribuirMassa(72);
       console.log(circuito.toString());
     }
   }, [nodes, edges, play]);
@@ -113,6 +114,7 @@ const Grid = (props) => {
         // label: 'Sua seta personalizada',
         markerEnd: { type: MarkerType.ArrowClosed },
       };
+      console.log(newEdge);
       setEdges((eds) => addEdge(newEdge, eds));
     },
     [setEdges]
@@ -144,6 +146,7 @@ const Grid = (props) => {
         position,
         data: data,
         smoothStep: 0,
+        selectable: true,
       };
       setEditing(true);
       setNodes((nds) => nds.concat(newNode));

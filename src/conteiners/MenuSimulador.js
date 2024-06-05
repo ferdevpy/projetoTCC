@@ -108,13 +108,13 @@ const MenuSimulador = (props) => {
               tag={"Alimentacao"}
               style={{ width: 40, height: 40 }}
             />
-            <BotaoArrastavel
+            {/* <BotaoArrastavel
               src={"pilha.png"}
               label={"Pilha"}
               type={"imageDefault"}
               tag={"Pilha"}
               style={{ width: 40, height: 30 }}
-            />
+            /> */}
           </Space>
         </Col>
         <div style={{ fontSize: 12 }}>Alimentação</div>
@@ -139,18 +139,18 @@ const MenuSimulador = (props) => {
             />
             <BotaoArrastavel
               src={"britador_giratorio.png"}
-              label={"Britador giratório"}
+              label={"Britagem Secundária"}
               type={"imageDefault"}
               tag={"BritagemSecundaria"}
               style={{ width: 40, height: 40 }}
             />
-            <BotaoArrastavel
+            {/* <BotaoArrastavel
               src={"Grelha.png"}
               label={"Grelha"}
               type={"imageThree"}
               tag={"Grelha"}
               style={{ width: 40, height: 40 }}
-            />
+            /> */}
             <BotaoArrastavel
               src={"Peneira.png"}
               label={"Peneira"}
@@ -173,13 +173,13 @@ const MenuSimulador = (props) => {
           }}
         >
           <Space direction="inline" size={"middle"}>
-            <BotaoArrastavel
+            {/* <BotaoArrastavel
               src={"moinho_barras.png"}
               label={"Moinho SAG"}
               type={"imageDefaultMoagem"}
               tag={"SAG"}
               style={{ width: 40, height: 30 }}
-            />
+            /> */}
             <BotaoArrastavel
               type={"imageDefaultMoagem"}
               label="Moinho de bolas"
@@ -194,18 +194,18 @@ const MenuSimulador = (props) => {
               tag={"Hidrociclone"}
               style={{ width: 40, height: 40 }}
             />
-            <BotaoArrastavel
+            {/* <BotaoArrastavel
               src={"Peneira.png"}
               label={"Peneira"}
               type={"imageThree"}
               tag={"Peneiramento"}
               style={{ width: 40, height: 30 }}
-            />
+            /> */}
           </Space>
         </Col>
         <div style={{ fontSize: 12 }}>Moagem</div>
       </div>
-      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
+      {/* <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{
             width: "auto",
@@ -240,6 +240,26 @@ const MenuSimulador = (props) => {
           </Space>
         </Col>
         <div style={{ fontSize: 12 }}>Concentração</div>
+      </div> */}
+      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
+        <Col
+          style={{
+            width: "auto",
+            height: 50,
+            borderBottom: "1px solid #ddd",
+            textAlign: "center",
+            paddingInline: "10px",
+          }}
+        >
+          <BotaoArrastavel
+            src={"pilha.png"}
+            label={"Pilha"}
+            type={"imageOutput"}
+            tag={"Pilha"}
+            style={{ width: 40, height: 30 }}
+          />
+        </Col>
+        <div style={{ fontSize: 12 }}>Saída</div>
       </div>
     </Row>
   );

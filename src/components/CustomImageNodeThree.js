@@ -26,13 +26,13 @@ export default memo(({ data }) => {
       <Handle
         type="source"
         position={Position.Right}
-        id="output1"
+        id="overflow"
         className="customHandleRight"
         onConnect={(params) => console.log("handle onConnect", params)}
       />
       <Handle
         type="source"
-        id="output2"
+        id="underflow"
         className="customHandleBottom"
         position={Position.Bottom}
         onConnect={(params) => console.log("handle onConnect", params)}

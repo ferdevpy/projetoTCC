@@ -74,8 +74,8 @@ const PropertiesBritagemPrimaria = (props) => {
         console.log("entrou");
         var option;
 
-        let tabela = calculaRetidaAndPassante(0.9, 150)["tabela"];
-        formResults.setFieldsValue(calculaRetidaAndPassante(0.9, 150));
+        let tabela = calculaRetidaAndPassante(0.9, 150, 1880)["tabela"];
+        formResults.setFieldsValue(calculaRetidaAndPassante(0.9, 150, 1880));
         console.log(tabela);
         var myChart = echarts.init(chartDom);
         option = {
@@ -84,7 +84,7 @@ const PropertiesBritagemPrimaria = (props) => {
             trigger: "axis",
           },
           legend: {
-            data: ["Passante [mm]", "Retida [mm]", "ri"],
+            data: ["Passante [t/h]", "Retida [t/h]", "ri"],
           },
           grid: {
             left: "3%",
@@ -98,14 +98,21 @@ const PropertiesBritagemPrimaria = (props) => {
             },
           },
           xAxis: {
+            name: "Peneira (mm)",
+            nameLocation: "middle", // Localização do título
+            nameTextStyle: {
+              fontSize: 14,
+              padding: [0, 0, 150, 0], // Ajuste do espaçamento
+            },
             type: "category",
             boundaryGap: false,
-            data: tabela.mm,
+            data: tabela.mm.slice().reverse(),
             axisLabel: {
               formatter: (value) => parseFloat(value).toFixed(2), // Sem casas decimais no eixo x
             },
           },
           yAxis: {
+            title: "Massa (t/h)",
             type: "value",
             axisLabel: {
               formatter: (value) => parseFloat(value).toFixed(0), // Sem casas decimais no eixo y
@@ -113,26 +120,22 @@ const PropertiesBritagemPrimaria = (props) => {
           },
           series: [
             {
-              name: "Passante [mm]",
+              name: "Passante [t/h]",
               type: "line",
               stack: "Total",
-              data: tabela.passantemm.map((value) =>
-                parseFloat(value).toFixed(2)
-              ),
+              data: tabela.passanteMassa
+                .slice()
+                .reverse()
+                .map((value) => parseFloat(value).toFixed(2)),
             },
             {
-              name: "Retida [mm]",
+              name: "Retida [t/h]",
               type: "line",
               stack: "Total",
-              data: tabela.retidamm.map((value) =>
-                parseFloat(value).toFixed(2)
-              ),
-            },
-            {
-              name: "ri",
-              type: "line",
-              stack: "Total",
-              data: tabela.ri.map((value) => parseFloat(value).toFixed(2)),
+              data: tabela.retidaMassa
+                .slice()
+                .reverse()
+                .map((value) => parseFloat(value).toFixed(2)),
             },
           ],
         };

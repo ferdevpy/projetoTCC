@@ -4,6 +4,7 @@ import {
   BritagemSecundaria,
   Peneiramento,
   Moagem,
+  Pilha,
 } from "./Equipamentos";
 
 export class Circuito {
@@ -17,8 +18,8 @@ export class Circuito {
     this.equipamentos[id] = equipamento;
   }
 
-  adicionarConexao(sourceId, targetId) {
-    this.conexoes.push({ sourceId, targetId });
+  adicionarConexao(sourceId, targetId, saida = "default") {
+    this.conexoes.push({ sourceId, targetId, saida });
   }
 
   distribuirMassa(horas) {
@@ -32,13 +33,35 @@ export class Circuito {
       // Processar massa através do circuito
       for (let conexao of this.conexoes) {
         const sourceEquipamento = this.equipamentos[conexao.sourceId];
-        const massaProcessada = sourceEquipamento.processarMassa();
-        const targetEquipamento = this.equipamentos[conexao.targetId];
-        targetEquipamento.receberMassa(massaProcessada);
+        const massasProcessadas = sourceEquipamento.processarMassa();
+
+        if (massasProcessadas && typeof massasProcessadas === "object") {
+          const massaUnderflow = massasProcessadas["underflow"];
+          const massaOverflow = massasProcessadas["overflow"];
+          if (conexao.saida === "underflow") {
+            this.equipamentos[conexao.targetId].receberMassa(massaUnderflow);
+          } else {
+            this.equipamentos[conexao.targetId].receberMassa(massaOverflow);
+          }
+        } else if (massasProcessadas !== undefined) {
+          const targetId = conexao.targetId;
+          const targetEquipamento = this.equipamentos[targetId];
+          targetEquipamento.receberMassa(massasProcessadas);
+        }
       }
+
       if (hora % intervaloExibicao === 0) {
         this.exibirEstado(hora);
       }
+      // const massaPilha = Object.values(this.equipamentos).find(equipamento => equipamento instanceof Pilha).massaRecebida;
+      
+      // const massaAlimentacao = Object.values(this.equipamentos).find(equipamento => equipamento instanceof Alimentacao).massaSaida;
+      // if (massaPilha >= massaAlimentacao) {
+      //   console.log(
+      //     "Simulação parada: Massa na pilha igual à massa de saída da alimentação."
+      //   );
+      //   return; // Encerra a função e, portanto, a simulação
+      // }
     }
   }
   exibirEstado(hora) {
@@ -63,13 +86,17 @@ export function configurarCircuito(properties, nodes, edges) {
 
     let equipamento;
     if (id.startsWith("Alimentacao")) {
-      equipamento = new Alimentacao(0.98, 100);
+      equipamento = new Alimentacao(1, 100);
     } else if (id.startsWith("BritagemPrimaria")) {
-      equipamento = new BritagemPrimaria(0.9, 75);
-    } else if (id.startsWith("BritadorCone")) {
-      equipamento = new BritagemSecundaria(0.89, 80);
+      equipamento = new BritagemPrimaria(1, 100);
+    } else if (id.startsWith("Peneiramento")) {
+      equipamento = new Peneiramento(150, 1, 100, 20);
+    } else if (id.startsWith("BritagemSecundaria")) {
+      equipamento = new BritagemSecundaria(0.89, 100);
     } else if (id.startsWith("Moagem")) {
       equipamento = new Moagem(0.8, 30, 20);
+    } else if (id.startsWith("Pilha")) {
+      equipamento = new Pilha(1, 5000, 20);
     }
 
     circuito.adicionarEquipamento(id, equipamento);
@@ -77,10 +104,11 @@ export function configurarCircuito(properties, nodes, edges) {
 
   // Configurando as conexões
   for (let edge of edges) {
-    const { source, target } = edge;
-    circuito.adicionarConexao(source, target);
+    const { source, target, sourceHandle } = edge;
+    circuito.adicionarConexao(source, target, sourceHandle);
   }
 
+  console.log(circuito);
   return circuito;
 }
 // Criando o circuito e adicionando os equipamentos
