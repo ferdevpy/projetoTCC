@@ -21,8 +21,36 @@ const calculoC = (b1, b2, b3, b4, q, tx, k1, k3, serie) => {
 };
 
 //Fração de distribuição dos fragmentos da quebra
-const calculoBij = (phi, gM, beta, xj, serie) => {
+export function calculoBij(phi, gM, beta, serie) {
+  let xj = serie.mm[0];
   return serie.mm.map((abertura) => {
     return phi * (abertura / xj) ** gM + (1 - phi) * (abertura / xj) ** beta;
   });
-};
+}
+
+export function calculobij(Bij) {
+  let bij = [];
+  for (i = 0; Bij.length - 1; i++) {
+    if (i === 0) {
+      bij.push(0);
+    } else {
+      bij.push(Bij[i - 1] - Bij[i]);
+    }
+  }
+  return bij;
+}
+
+function calcularDistribuicaoGranulometrica(A, b, t10, peneiras) {
+  let tamanhos = peneiras.mm;
+  const distribuicao = [];
+
+  tamanhos.forEach((tamanho) => {
+    const percentagemPassante = 1 - Math.exp(0 - (tamanho / A) ** b);
+    distribuicao.push({
+      tamanho: tamanho,
+      percentagemPassante: percentagemPassante, // Em percentual
+    });
+  });
+
+  return distribuicao;
+}

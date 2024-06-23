@@ -21,6 +21,7 @@ import CustomImageNodeDefaultMoagem from "../components/CustomImageNodeDefaultMo
 import FloatPlay from "./FloatPlay";
 import { configurarCircuito } from "../scripts/MontaCircuito";
 import { calculaRetidaAndPassante } from "../scripts/FormulasBritagem";
+import { processarDados } from "../scripts/CalculosGerais";
 
 const LOCAL_STORAGE_KEY = "flowData";
 
@@ -50,6 +51,7 @@ const Grid = (props) => {
   const [editing, setEditing] = useState(true);
   const [idNode, setIdNode] = useState("");
   const [play, setPlay] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const [flowData, setFlowData] = useState(
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {}
   );
@@ -86,11 +88,13 @@ const Grid = (props) => {
   }, [flowData]);
 
   useEffect(() => {
-    let circuito = configurarCircuito(properties, nodes, edges);
-    // console.log(circuito.toString());
-    if (play) {
-      circuito.distribuirMassa(72);
-      console.log(circuito.toString());
+    if (play & (nodes.length !== 0) & (edges.length !== 0)) {
+      let circuito = configurarCircuito(properties, nodes, edges);
+      circuito.executar(setPlay, setIsRunning);
+      localStorage.setItem(
+        "resultadoSimulacao",
+        JSON.stringify(processarDados(circuito.obterHistorico()))
+      );
     }
   }, [nodes, edges, play]);
 
@@ -180,6 +184,8 @@ const Grid = (props) => {
         nodes={nodes}
         edges={edges}
         setPlay={setPlay}
+        setIsRunning={setIsRunning}
+        isRunning={isRunning}
       />
       <ReactFlow
         nodes={nodes}

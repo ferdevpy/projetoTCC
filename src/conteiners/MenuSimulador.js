@@ -153,7 +153,7 @@ const MenuSimulador = (props) => {
             /> */}
             <BotaoArrastavel
               src={"Peneira.png"}
-              label={"Peneira"}
+              label={"Peneiramento"}
               type={"imageThree"}
               tag={"Peneiramento"}
               style={{ width: 40, height: 30 }}
@@ -162,7 +162,7 @@ const MenuSimulador = (props) => {
         </Col>
         <div style={{ fontSize: 12 }}>Britagem</div>
       </div>
-      <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
+      {/* <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{
             width: "auto",
@@ -173,13 +173,13 @@ const MenuSimulador = (props) => {
           }}
         >
           <Space direction="inline" size={"middle"}>
-            {/* <BotaoArrastavel
+            <BotaoArrastavel
               src={"moinho_barras.png"}
               label={"Moinho SAG"}
               type={"imageDefaultMoagem"}
               tag={"SAG"}
               style={{ width: 40, height: 30 }}
-            /> */}
+            />
             <BotaoArrastavel
               type={"imageDefaultMoagem"}
               label="Moinho de bolas"
@@ -194,17 +194,17 @@ const MenuSimulador = (props) => {
               tag={"Hidrociclone"}
               style={{ width: 40, height: 40 }}
             />
-            {/* <BotaoArrastavel
+            <BotaoArrastavel
               src={"Peneira.png"}
               label={"Peneira"}
               type={"imageThree"}
               tag={"Peneiramento"}
               style={{ width: 40, height: 30 }}
-            /> */}
+            />
           </Space>
         </Col>
         <div style={{ fontSize: 12 }}>Moagem</div>
-      </div>
+      </div> */}
       {/* <div style={{ borderRight: "1px solid #ddd", textAlign: "center" }}>
         <Col
           style={{

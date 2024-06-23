@@ -30,7 +30,7 @@ const PageHeader = () => {
       />
       <Title
         level={3}
-        title="Plant Simulator"
+        title="Simulador Geometalúrgico de Usina"
         style={{
           top: "-10%",
           left: "40%",
@@ -42,7 +42,7 @@ const PageHeader = () => {
           color: "#FFFFFF",
         }}
       >
-        Plant Simulator
+        Simulador Geometalúrgico de Usina
       </Title>
     </Header>
   );

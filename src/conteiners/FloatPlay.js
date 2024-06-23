@@ -3,35 +3,52 @@ import {
   PauseOutlined,
   CaretRightFilled,
   BorderOutlined,
+  SettingFilled,
 } from "@ant-design/icons";
 
 import React, { useState, useEffect } from "react";
+import SimulationSettings from "./SimulationSettings";
+
 const FloatPlay = (props) => {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [timerId, setTimerId] = useState(null);
+  const [showSimulationSettings, setShowSimulationSettings] = useState(false);
 
   useEffect(() => {
     if (isRunning) {
       const id = setInterval(() => {
         setTimer((prevTimer) => prevTimer + 1);
       }, 1000);
-
       setTimerId(id);
-    } else {
+    } else if (timerId) {
       clearInterval(timerId);
     }
 
     return () => clearInterval(timerId);
-  }, [isRunning]); // Executar o efeito quando o estado de isRunning mudar
+  }, [isRunning]);
+
+  useEffect(() => {
+    if (!(props.isRunning && props.play)) {
+      setIsRunning(false);
+      props.setEdges(
+        props.edges.map((edge) => {
+          edge.animated = false;
+          return edge;
+        })
+      );
+    }
+  }, [props.isRunning, props.play]);
 
   const handleStart = () => {
+    setTimer(0);
     props.setPlay(true);
     setIsRunning(true);
+    props.setIsRunning(true);
     props.setEdges(
-      props.edges.map((edges) => {
-        edges.animated = true;
-        return edges;
+      props.edges.map((edge) => {
+        edge.animated = true;
+        return edge;
       })
     );
   };
@@ -39,24 +56,30 @@ const FloatPlay = (props) => {
   const handlePause = () => {
     props.setPlay(false);
     setIsRunning(false);
+    props.setIsRunning(false);
     props.setEdges(
-      props.edges.map((edges) => {
-        edges.animated = false;
-        return edges;
+      props.edges.map((edge) => {
+        edge.animated = false;
+        return edge;
       })
     );
   };
 
   const handleStop = () => {
     props.setPlay(false);
+    props.setIsRunning(false);
     setIsRunning(false);
     props.setEdges(
-      props.edges.map((edges) => {
-        edges.animated = false;
-        return edges;
+      props.edges.map((edge) => {
+        edge.animated = false;
+        return edge;
       })
     );
     setTimer(0);
+  };
+
+  const handleShowSettings = () => {
+    setShowSimulationSettings(true);
   };
 
   const formatTime = (timeInSeconds) => {
@@ -74,16 +97,16 @@ const FloatPlay = (props) => {
       style={{
         position: "fixed",
         top: "15%",
-        right: "20px",
+        right: "50px",
         transform: "translateY(-50%)",
         backgroundColor: "rgba(255, 255, 255, 0.9)",
         borderRadius: "4px",
         padding: "8px",
         height: "30px",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
-        zIndex: 1000, // Ajuste conforme necessário para garantir que a div flutuante esteja acima de outros elementos
-        display: "flex", // Usando um layout flexível
-        alignItems: "center", // Ajuste conforme necessário para garantir que a div flutuante esteja acima de outros elementos
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <Tooltip title="Play">
@@ -93,7 +116,7 @@ const FloatPlay = (props) => {
           icon={<CaretRightFilled />}
           style={{ margin: "4px" }}
           onClick={handleStart}
-          disabled={isRunning}
+          disabled={isRunning && props.isRunning}
         />
       </Tooltip>
       <Tooltip title="Pause">
@@ -103,7 +126,7 @@ const FloatPlay = (props) => {
           icon={<PauseOutlined />}
           style={{ margin: "4px" }}
           onClick={handlePause}
-          disabled={!isRunning}
+          disabled={!(isRunning && props.isRunning)}
         />
       </Tooltip>
       <Tooltip title="Stop">
@@ -113,12 +136,22 @@ const FloatPlay = (props) => {
           icon={<BorderOutlined />}
           style={{ margin: "4px" }}
           onClick={handleStop}
-          disabled={!isRunning && timer === 0}
+          disabled={!(isRunning && props.isRunning) && timer === 0}
         />
       </Tooltip>
       <Tooltip title="Timer">
         <div style={{ marginLeft: "8px" }}>{formatTime(timer)}</div>
       </Tooltip>
+      <Button
+        icon={<SettingFilled />}
+        type="text"
+        style={{ margin: "4px" }}
+        onClick={handleShowSettings}
+      />
+      <SimulationSettings
+        setShowSimulationSettings={setShowSimulationSettings}
+        visible={showSimulationSettings}
+      />
     </div>
   );
 };

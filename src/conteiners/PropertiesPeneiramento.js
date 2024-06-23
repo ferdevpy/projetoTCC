@@ -1,10 +1,9 @@
-import { InputNumber, Form, Select, Tabs } from "antd";
+import { InputNumber, Form, Tabs } from "antd";
 import { useEffect, useState } from "react";
 import * as echarts from "echarts";
 import { getItemsFromLocalStorage } from "../scripts/CalculosGerais";
 
-const PropertiesBritagemPrimaria = (props) => {
-  const [caracteristica, setCaracteristica] = useState(<Select></Select>);
+const PropertiesPeneiramento = (props) => {
   const [activeKey, setActiveKey] = useState("1");
 
   const formItemLayout = {
@@ -27,45 +26,6 @@ const PropertiesBritagemPrimaria = (props) => {
   };
 
   useEffect(() => {
-    const workIndexValue = props.formProperties.getFieldValue("workIndex");
-    if (workIndexValue !== undefined) {
-      onChangeWorkIndex(workIndexValue);
-    }
-  }, [props.idNode]);
-  const onChangeWorkIndex = (event) => {
-    if (event >= 5 && event <= 10) {
-      setCaracteristica(
-        <Select>
-          <Select.Option value={0.9}>Macio</Select.Option>
-          <Select.Option value={0.95}>Macio esponjoso</Select.Option>
-        </Select>
-      );
-    } else if (event > 10 && event <= 13) {
-      setCaracteristica(
-        <Select>
-          <Select.Option value={0.9}>Mediano</Select.Option>
-          <Select.Option value={0.85}>Mediano esponjoso</Select.Option>
-        </Select>
-      );
-    } else if (event > 13) {
-      setCaracteristica(
-        <Select>
-          <Select.Option value={0.9}>Brita Dura</Select.Option>
-          <Select.Option value={0.82}>Duro e tenaz</Select.Option>
-          <Select.Option value={0.75}>Duro lamelar</Select.Option>
-        </Select>
-      );
-    }
-  };
-
-  useEffect(() => {
-    const workIndexValue = props.formProperties.getFieldValue("workIndex");
-    if (workIndexValue !== undefined) {
-      onChangeWorkIndex(workIndexValue);
-    }
-  }, [props.idNode]);
-
-  useEffect(() => {
     if (activeKey === "2") {
       let calculos = getItemsFromLocalStorage(props.idNode);
       props.formResults.setFieldsValue(calculos);
@@ -77,7 +37,7 @@ const PropertiesBritagemPrimaria = (props) => {
         )[props.idNode];
         var myChart = echarts.init(chartDom);
         option = {
-          title: { show: false, text: "Resultado Britagem Primária" },
+          title: { show: false, text: "Resultado Peneiramento" },
           tooltip: {
             trigger: "axis",
           },
@@ -156,13 +116,6 @@ const PropertiesBritagemPrimaria = (props) => {
             <Form size="small" form={props.formProperties} {...formItemLayout}>
               <Form.Item
                 style={{ textAlign: "end" }}
-                name={"oss"}
-                label={"OSS(APA)"}
-              >
-                <InputNumber />
-              </Form.Item>
-              <Form.Item
-                style={{ textAlign: "end" }}
                 name={"eficiencia"}
                 label={"Eficiencia"}
               >
@@ -177,17 +130,31 @@ const PropertiesBritagemPrimaria = (props) => {
               </Form.Item>
               <Form.Item
                 style={{ textAlign: "end" }}
-                name={"workIndex"}
-                label={"Work Index"}
+                name={"abertura"}
+                label={"Abertura (mm)"}
               >
-                <InputNumber onChange={onChangeWorkIndex} />
+                <InputNumber />
               </Form.Item>
               <Form.Item
                 style={{ textAlign: "end" }}
-                name={"Pt"}
-                label={"Característica do Material"}
+                name={"sNb"}
+                label={"sNb (kg/m³)"}
               >
-                {caracteristica}
+                <InputNumber />
+              </Form.Item>
+              <Form.Item
+                style={{ textAlign: "end" }}
+                name={"sP"}
+                label={"sP (kg/m³)"}
+              >
+                <InputNumber />
+              </Form.Item>
+              <Form.Item
+                style={{ textAlign: "end" }}
+                name={"sLi"}
+                label={"sLi (kg/m³)"}
+              >
+                <InputNumber />
               </Form.Item>
             </Form>
           ),
@@ -197,25 +164,46 @@ const PropertiesBritagemPrimaria = (props) => {
           key: "2",
           children: (
             <Form size="small" form={props.formResults} {...formItemLayout}>
-              <Form.Item style={{ textAlign: "end" }} name={"ku"} label={"Ku"}>
+              <Form.Item style={{ textAlign: "end" }} name={"k2"} label={"k2"}>
                 <InputNumber readOnly />
               </Form.Item>
-              <Form.Item style={{ textAlign: "end" }} name={"pt"} label={"Pt"}>
+              <Form.Item style={{ textAlign: "end" }} name={"k3"} label={"k4"}>
                 <InputNumber readOnly />
               </Form.Item>
-              <Form.Item style={{ textAlign: "end" }} name={"Pb"} label={"Pb"}>
+              <Form.Item style={{ textAlign: "end" }} name={"k4"} label={"k4"}>
                 <InputNumber readOnly />
               </Form.Item>
-              <Form.Item style={{ textAlign: "end" }} name={"kl"} label={"KL"}>
+              <Form.Item style={{ textAlign: "end" }} name={"k6"} label={"k6"}>
                 <InputNumber readOnly />
               </Form.Item>
               <Form.Item
                 style={{ textAlign: "end" }}
-                name={"p80"}
-                label={"P80"}
+                name={"produtorio"}
+                label={"Produtório"}
               >
                 <InputNumber readOnly />
               </Form.Item>
+              <Form.Item
+                style={{ textAlign: "end" }}
+                name={"IUP"}
+                label={"IUP"}
+              >
+                <InputNumber readOnly />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"RR"} label={"RR"}>
+                <InputNumber readOnly />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"e"} label={"e"}>
+                <InputNumber readOnly />
+              </Form.Item>
+              <Form.Item
+                style={{ textAlign: "end" }}
+                name={"1menose"}
+                label={"1-e"}
+              >
+                <InputNumber readOnly />
+              </Form.Item>
+
               <div
                 id="graficoResultados"
                 style={{ width: "700px", height: "400px" }}
@@ -228,4 +216,4 @@ const PropertiesBritagemPrimaria = (props) => {
   );
 };
 
-export default PropertiesBritagemPrimaria;
+export default PropertiesPeneiramento;

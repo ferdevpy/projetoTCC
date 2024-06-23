@@ -11,6 +11,7 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import PropertiesBritagemPrimaria from "./PropertiesBritagemPrimaria";
+import PropertiesPeneiramento from "./PropertiesPeneiramento";
 
 const LOCAL_STORAGE_KEY = "flowData";
 const Properties = (props) => {
@@ -57,7 +58,18 @@ const Properties = (props) => {
     console.log(properties);
     props.setUpdate(!props.update);
     let storageAnterior = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    let propertiesStorageAnterior = JSON.parse(
+      localStorage.getItem("properties")
+    )
+      ? JSON.parse(localStorage.getItem("properties"))
+      : {};
+
     storageAnterior.properties = properties;
+    propertiesStorageAnterior[props.idNode] = formProperties.getFieldsValue();
+    localStorage.setItem(
+      "properties",
+      JSON.stringify(propertiesStorageAnterior)
+    );
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storageAnterior));
     window.location.reload();
   };
@@ -169,13 +181,6 @@ const Properties = (props) => {
         </Form.Item>
         <Form.Item
           style={{ textAlign: "end" }}
-          name={"workIndex"}
-          label={"Work Index"}
-        >
-          <InputNumber />
-        </Form.Item>
-        <Form.Item
-          style={{ textAlign: "end" }}
           name={"densidade"}
           label={"Densidade"}
         >
@@ -184,14 +189,14 @@ const Properties = (props) => {
         <Form.Item
           style={{ textAlign: "end" }}
           name={"taxaAlimentacao"}
-          label={"Taxa de Alimentação"}
+          label={"Taxa de Alimentação (t/h)"}
         >
           <InputNumber min={0} />
         </Form.Item>
         <Form.Item
           style={{ textAlign: "end" }}
           name={"variabilidade"}
-          label={"Variabilidade"}
+          label={"Variabilidade (%)"}
         >
           <InputNumber />
         </Form.Item>
@@ -204,40 +209,12 @@ const Properties = (props) => {
         idNode={props.idNode}
       />
     ),
-    Peneira: (
-      <Form size="small" form={formProperties} {...formItemLayout}>
-        <Form.Item style={{ textAlign: "end" }} name={"type"} label={"Type"}>
-          <Select></Select>
-        </Form.Item>
-        <Form.Item
-          style={{ textAlign: "end" }}
-          name={"designScreenSize"}
-          label={"Design Screen Size"}
-        >
-          <Checkbox />
-        </Form.Item>
-        <Form.Item
-          style={{ textAlign: "end" }}
-          name={"screenSize"}
-          label={"Screen Size"}
-        >
-          <InputNumber min={0} />
-        </Form.Item>
-        <Form.Item
-          style={{ textAlign: "end" }}
-          name={"t80Slope"}
-          label={"T80 Slope"}
-        >
-          <InputNumber />
-        </Form.Item>
-        <Form.Item
-          style={{ textAlign: "end" }}
-          name={"t80Intercept"}
-          label={"T80 Intercept"}
-        >
-          <InputNumber />
-        </Form.Item>
-      </Form>
+    Peneiramento: (
+      <PropertiesPeneiramento
+        formProperties={formProperties}
+        formResults={formResults}
+        idNode={props.idNode}
+      />
     ),
     SAG: (
       <Form size="small" form={formProperties} {...formItemLayout}>
