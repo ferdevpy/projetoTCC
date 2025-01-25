@@ -3,9 +3,10 @@ import { calcularP80 } from "./CalculosGerais";
 import {
   calculoE,
   calculoRR,
-  calcuoIUP,
+  calculoIUP,
   produtorio,
 } from "./FormulasPeneiramento";
+import { calculoResultadoBritagemSec } from "./FormulasBritagemSec";
 
 export class Equipamento {
   constructor(nome, eficiencia, capacidadeMaxima) {
@@ -25,12 +26,14 @@ export class Equipamento {
 
   receberMassa(massa) {
     if (typeof massa === "object") {
-      this.distribuicaoGranulometrica = massa.peneiras;
-      this.massaRecebidaAtual = massa.massa;
-      this.massaRecebidaTotal += massa.massa;
+      this.distribuicaoGranulometrica = massa.peneiras || {};
+      const massaRecebida = parseFloat(massa.massa) || 0;
+      this.massaRecebidaAtual += massaRecebida;
+      this.massaRecebidaTotal += massaRecebida;
     } else {
-      this.massaRecebidaAtual = massa;
-      this.massaRecebidaTotal += massa;
+      const massaRecebida = parseFloat(massa) || 0;
+      this.massaRecebidaAtual += massaRecebida;
+      this.massaRecebidaTotal += massaRecebida;
     }
   }
 
@@ -95,11 +98,12 @@ export class Alimentacao extends Equipamento {
         (((Math.random() * 2 - 1) * this.variabilidade) / 100) *
         this.taxaAlimentacao;
       this.taxaAlimentacao += variacao;
-      this.horasPassadas = 0; // Reseta o contador de horas
+      this.horasPassadas = 0;
     }
 
     const massaProcessada =
       this.taxaAlimentacao * this.eficiencia * intervaloHoras;
+    this.massaRecebidaAtual = 0; // Alimentação sempre "recomeça"
     this.massaSaidaAtual = massaProcessada;
     this.massaSaidaTotal += massaProcessada;
 
@@ -143,8 +147,71 @@ export class BritagemPrimaria extends Equipamento {
 }
 
 export class BritagemSecundaria extends Equipamento {
-  constructor(nome) {
-    super(nome, 1, 100); // 85% de eficiência, 80 t/h capacidade máxima
+  constructor(
+    nome,
+    eficiencia,
+    capacidadeMaxima,
+    css,
+    a1,
+    a3,
+    b1,
+    b2,
+    b3,
+    b4,
+    phi,
+    gM,
+    beta,
+    tx,
+    q
+  ) {
+    super(nome, eficiencia, capacidadeMaxima);
+    this.css = css;
+    this.a1 = a1;
+    this.a3 = a3;
+    this.b1 = b1;
+    this.b2 = b2;
+    this.b3 = b3;
+    this.b4 = b4;
+    this.phi = phi;
+    this.gM = gM;
+    this.beta = beta;
+    this.tx = tx;
+    this.q = q;
+  }
+
+  processarMassa(intervaloHoras) {
+    const massaProcessada =
+      this.massaRecebidaAtual * this.eficiencia * intervaloHoras;
+    this.massaSaidaAtual = massaProcessada;
+    this.massaSaidaTotal += massaProcessada;
+    console.log("massa recebida brit sec: ", this.massaRecebidaAtual);
+    console.log("distribuição sec: ", this.distribuicaoGranulometrica);
+
+    // Calcula a série de peneiras
+    const serieDePeneiras = this.distribuicaoGranulometrica;
+
+    let resultadoBritagem = calculoResultadoBritagemSec(
+      this.a1,
+      this.a3,
+      this.b1,
+      this.b2,
+      this.b3,
+      this.b4,
+      this.q,
+      this.tx,
+      serieDePeneiras,
+      this.css,
+      this.phi,
+      this.gM,
+      this.beta
+    );
+
+    console.log("resultado britagem sec:", resultadoBritagem);
+
+    resultadoBritagem["p80"] = calcularP80(serieDePeneiras);
+    resultadoBritagem["pt"] = this.pt;
+    localStorage.setItem(this.nome, JSON.stringify(resultadoBritagem));
+    return serieDePeneiras;
   }
 }
 
@@ -160,7 +227,7 @@ export class Peneiramento extends Equipamento {
     let sNb = propertiesPeneiramento.sNb;
     let sP = propertiesPeneiramento.sP;
     let resultado = produtorio(massa, this.abertura, sNb, sP);
-    resultado["IUP"] = calcuoIUP(massa, this.abertura, sNb, sP);
+    resultado["IUP"] = calculoIUP(massa, this.abertura, sNb, sP);
     resultado["RR"] = calculoRR(massa, this.abertura, sNb, sP);
     let e = calculoE(massa, this.abertura, sNb, sP);
     resultado["e"] = e;

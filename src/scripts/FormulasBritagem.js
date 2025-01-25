@@ -48,6 +48,7 @@ export function calculaRetidaAndPassante(Pt, OSS, massa) {
     } else {
       passante = calculoPDiMenor(ri, kl);
       tabela["passantemm"].push(passante);
+
       tabela["passanteMassa"].push(passante * massa);
     }
     if (i === 0) {
@@ -55,7 +56,7 @@ export function calculaRetidaAndPassante(Pt, OSS, massa) {
     } else {
       let retida = tabela["passantemm"][i - 1] - passante;
       tabela["retidamm"].push(retida);
-      tabela["retidaMassa"].push(retida*massa);
+      tabela["retidaMassa"].push(retida * massa);
     }
     i = i + 1;
   }

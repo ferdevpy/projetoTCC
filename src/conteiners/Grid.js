@@ -52,6 +52,7 @@ const Grid = (props) => {
   const [idNode, setIdNode] = useState("");
   const [play, setPlay] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
+  const [simulationTime, setSimulationTime] = useState(0);
   const [flowData, setFlowData] = useState(
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {}
   );
@@ -90,7 +91,7 @@ const Grid = (props) => {
   useEffect(() => {
     if (play & (nodes.length !== 0) & (edges.length !== 0)) {
       let circuito = configurarCircuito(properties, nodes, edges);
-      circuito.executar(setPlay, setIsRunning);
+      circuito.executar(setPlay, setIsRunning, setSimulationTime);
       localStorage.setItem(
         "resultadoSimulacao",
         JSON.stringify(processarDados(circuito.obterHistorico()))
@@ -186,6 +187,8 @@ const Grid = (props) => {
         setPlay={setPlay}
         setIsRunning={setIsRunning}
         isRunning={isRunning}
+        setSimulationTime={setSimulationTime}
+        simulationTime={simulationTime}
       />
       <ReactFlow
         nodes={nodes}

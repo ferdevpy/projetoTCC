@@ -1,11 +1,8 @@
-import { InputNumber, Form, Select, Tabs } from "antd";
-import { useEffect, useState } from "react";
+import { InputNumber, Form, Tabs } from "antd";
 import * as echarts from "echarts";
 import { getItemsFromLocalStorage } from "../scripts/CalculosGerais";
 
-const PropertiesBritagemPrimaria = (props) => {
-  const [caracteristica, setCaracteristica] = useState(<Select></Select>);
-
+const PropertiesBritagemSecundaria = (props) => {
   const formItemLayout = {
     style: { width: "100%" },
     labelAlign: "left",
@@ -25,70 +22,24 @@ const PropertiesBritagemPrimaria = (props) => {
     },
   };
 
-  useEffect(() => {
-    const workIndexValue = props.formProperties.getFieldValue("workIndex");
-    if (workIndexValue !== undefined) {
-      onChangeWorkIndex(workIndexValue);
-    }
-  }, [props.idNode]);
-  const onChangeWorkIndex = (event) => {
-    if (event >= 5 && event <= 10) {
-      setCaracteristica(
-        <Select>
-          <Select.Option value={0.9}>Macio</Select.Option>
-          <Select.Option value={0.95}>Macio esponjoso</Select.Option>
-        </Select>
-      );
-    } else if (event > 10 && event <= 13) {
-      setCaracteristica(
-        <Select>
-          <Select.Option value={0.9}>Mediano</Select.Option>
-          <Select.Option value={0.85}>Mediano esponjoso</Select.Option>
-        </Select>
-      );
-    } else if (event > 13) {
-      setCaracteristica(
-        <Select>
-          <Select.Option value={0.9}>Brita Dura</Select.Option>
-          <Select.Option value={0.82}>Duro e tenaz</Select.Option>
-          <Select.Option value={0.75}>Duro lamelar</Select.Option>
-        </Select>
-      );
-    }
-  };
-
-  useEffect(() => {
-    const workIndexValue = props.formProperties.getFieldValue("workIndex");
-    if (workIndexValue !== undefined) {
-      onChangeWorkIndex(workIndexValue);
-    }
-  }, [props.idNode]);
-
   const onChangeActiveKey = (event) => {
-    console.log(event);
     if (event === "2") {
       let calculos = getItemsFromLocalStorage(props.idNode);
       props.formResults.setFieldsValue(calculos);
       const chartDom = document.getElementById("graficoResultados");
       if (chartDom) {
-        const resultadosSimulacao = JSON.parse(
+        var option;
+        let resultadosSimulacao = JSON.parse(
           localStorage.getItem("resultadoSimulacao")
         )[props.idNode];
-        // Encontrar o maior valor em cada conjunto de dados
-        const maxRecebidaTotal = Math.max(
-          ...resultadosSimulacao.massaRecebidaTotal
-        );
-        const maxSaidaTotal = Math.max(...resultadosSimulacao.massaSaidaTotal);
-        const myChart = echarts.init(chartDom);
-        // Determinar a proporção entre os dois maiores valores
-        const scaleFactor = maxRecebidaTotal / maxSaidaTotal;
-
-        const option = {
+        var myChart = echarts.init(chartDom);
+        option = {
+          title: { show: false, text: "Resultado Britagem Secundária" },
           tooltip: {
             trigger: "axis",
           },
           legend: {
-            data: ["Massa Recebida Acumulada", "Massa Saída Acumulada"],
+            data: ["P80", "Massa Recebida Acumulada", "Massa Saída Acumulada"],
           },
           grid: {
             left: "3%",
@@ -102,44 +53,45 @@ const PropertiesBritagemPrimaria = (props) => {
             },
           },
           xAxis: {
+            name: "Tempo (h)",
+            nameLocation: "middle", // Localização do título
+            nameTextStyle: {
+              fontSize: 14,
+              padding: [0, 0, 150, 0], // Ajuste do espaçamento
+            },
             type: "category",
             boundaryGap: false,
             data: resultadosSimulacao.hora,
+            axisLabel: {
+              interval: Math.ceil(resultadosSimulacao.hora.length / 10), // Define o intervalo dos rótulos
+            },
           },
-          yAxis: [
-            {
-              type: "value",
-              name: "Massa Recebida (t)",
-              position: "left",
+          yAxis: {
+            title: "Massa (t)",
+            type: "value",
+            axisLabel: {
+              formatter: (value) => parseFloat(value).toFixed(0), // Sem casas decimais no eixo y
             },
-            {
-              type: "value",
-              name: "Massa Saída (t)",
-              position: "right",
-              offset: 0, // Posiciona ao lado direito
-              scale: true, // Permite a escala
-            },
-          ],
+          },
           series: [
             {
               name: "Massa Recebida Acumulada",
               type: "line",
+              stack: "Total",
               data: resultadosSimulacao.massaRecebidaTotal.map((value) =>
                 parseFloat(value).toFixed(2)
               ),
-              yAxisIndex: 0, // Usa o eixo Y primário
             },
             {
               name: "Massa Saída Acumulada",
               type: "line",
-              data: resultadosSimulacao.massaSaidaTotal.map(
-                (value) => parseFloat(value * scaleFactor).toFixed(2) // Aplica o fator de escala
+              stack: "Total",
+              data: resultadosSimulacao.massaSaidaTotal.map((value) =>
+                parseFloat(value).toFixed(2)
               ),
-              yAxisIndex: 1, // Usa o eixo Y secundário
             },
           ],
         };
-
         myChart.setOption(option);
 
         return () => {
@@ -161,8 +113,8 @@ const PropertiesBritagemPrimaria = (props) => {
             <Form size="small" form={props.formProperties} {...formItemLayout}>
               <Form.Item
                 style={{ textAlign: "end" }}
-                name={"oss"}
-                label={"OSS(APA)"}
+                name={"css"}
+                label={"CSS"}
               >
                 <InputNumber />
               </Form.Item>
@@ -180,19 +132,50 @@ const PropertiesBritagemPrimaria = (props) => {
               >
                 <InputNumber />
               </Form.Item>
-              <Form.Item
-                style={{ textAlign: "end" }}
-                name={"workIndex"}
-                label={"Work Index"}
-              >
-                <InputNumber onChange={onChangeWorkIndex} />
+              <Form.Item style={{ textAlign: "end" }} name={"a1"} label={"A1"}>
+                <InputNumber />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"a3"} label={"A3"}>
+                <InputNumber />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"b1"} label={"B1"}>
+                <InputNumber />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"b2"} label={"B2"}>
+                <InputNumber />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"b3"} label={"B3"}>
+                <InputNumber />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"b4"} label={"B4"}>
+                <InputNumber />
               </Form.Item>
               <Form.Item
                 style={{ textAlign: "end" }}
-                name={"Pt"}
-                label={"Característica do Material"}
+                name={"phi"}
+                label={"phi"}
               >
-                {caracteristica}
+                <InputNumber />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"gM"} label={"gM"}>
+                <InputNumber />
+              </Form.Item>
+              <Form.Item
+                style={{ textAlign: "end" }}
+                name={"beta"}
+                label={"beta"}
+              >
+                <InputNumber />
+              </Form.Item>
+              <Form.Item
+                style={{ textAlign: "end" }}
+                name={"tx"}
+                label={"T(x)"}
+              >
+                <InputNumber />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "end" }} name={"q"} label={"q"}>
+                <InputNumber />
               </Form.Item>
             </Form>
           ),
@@ -233,4 +216,4 @@ const PropertiesBritagemPrimaria = (props) => {
   );
 };
 
-export default PropertiesBritagemPrimaria;
+export default PropertiesBritagemSecundaria;

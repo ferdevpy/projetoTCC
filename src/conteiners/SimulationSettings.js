@@ -1,5 +1,22 @@
-import { Form, Modal, TimePicker, Button, Col, InputNumber } from "antd";
+import {
+  ConfigProvider,
+  Form,
+  Modal,
+  TimePicker,
+  Button,
+  Col,
+  InputNumber,
+} from "antd";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import "dayjs/locale/pt-br"; // Localização do dayjs
+import ptBR from "antd/lib/locale/pt_BR";
+
+dayjs.locale("pt-br");
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const SimulationSettings = (props) => {
   const [formPropertiesSimulacao] = Form.useForm();
@@ -21,6 +38,7 @@ const SimulationSettings = (props) => {
       },
     },
   };
+  const time = dayjs.tz("01:00", "HH:mm", "America/Sao_Paulo");
   const handleSaveProperties = () => {
     localStorage.setItem(
       "propertiesSimulacao",
@@ -49,13 +67,25 @@ const SimulationSettings = (props) => {
       }
     >
       <Form form={formPropertiesSimulacao} {...formItemLayout}>
-        <Form.Item label={"Intervalo de tempo monitorado"} name={"intervalo"}>
-          <TimePicker
-            defaultValue={dayjs("01:00", "HH:mm")}
-            format={"HH:mm"}
-            style={{ width: "88px" }}
-          />
-        </Form.Item>
+        <ConfigProvider locale={ptBR}>
+          <Form.Item label={"Intervalo de tempo monitorado"} name={"intervalo"}>
+            <TimePicker
+              initialValues={dayjs("01:00", "HH:mm")}
+              format="HH:mm"
+              onChange={(time) => {
+                if (time) {
+                  const hours = time.hour(); // Extraindo apenas a hora
+                  const minutes = time.minute(); // Extraindo apenas os minutos
+                  console.log(`Hora selecionada: ${hours}`);
+                  console.log(`Minutos selecionados: ${minutes}`);
+                  const proportionalValue = hours + minutes / 60; // Calcula o valor proporcional
+                  console.log(`Valor proporcional: ${proportionalValue}`);
+                }
+              }}
+              style={{ width: "88px" }}
+            />
+          </Form.Item>
+        </ConfigProvider>
         <Form.Item label={"Dias simulação"} name={"dias"}>
           <InputNumber min={0} defaultValue={1} />
         </Form.Item>

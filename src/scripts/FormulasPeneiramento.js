@@ -93,12 +93,12 @@ export function produtorio(dados, abertura, sNb, sP) {
   };
 }
 
-export function calcuoIUP(dados, abertura, sNb, sP) {
-  return produtorio(dados, abertura, sNb, sP).produtommo * calculoIu(abertura);
+export function calculoIUP(dados, abertura, sNb, sP) {
+  return produtorio(dados, abertura, sNb, sP).produtorio * calculoIu(abertura);
 }
 
 export function calculoRR(dados, abertura, sNb, sP) {
-  return 1880 / (calcuoIUP(dados, abertura, sNb, sP) * 14);
+  return 1880 / (calculoIUP(dados, abertura, sNb, sP) * 14);
 }
 
 export function calculoE(dados, abertura, sNb, sP) {

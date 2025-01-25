@@ -1,4 +1,5 @@
-import { Button, Tooltip } from "antd";
+import { Button, Tooltip, notification } from "antd";
+
 import {
   PauseOutlined,
   CaretRightFilled,
@@ -10,27 +11,50 @@ import React, { useState, useEffect } from "react";
 import SimulationSettings from "./SimulationSettings";
 
 const FloatPlay = (props) => {
-  const [timer, setTimer] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [timerId, setTimerId] = useState(null);
   const [showSimulationSettings, setShowSimulationSettings] = useState(false);
 
+  const requiredFields = {
+    Pilha: [],
+    BritagemPrimaria: [
+      "oss",
+      "eficiencia",
+      "capacidadeMaxima",
+      "workIndex",
+      "Pt",
+    ],
+    BritagemSecundaria: [
+      "css",
+      "eficiencia",
+      "capacidadeMaxima",
+      "a1",
+      "a3",
+      "b1",
+      "b2",
+      "b3",
+      "b4",
+      "phi",
+      "gM",
+      "beta",
+      "tx",
+      "q",
+    ],
+    Peneiramento: [
+      "eficiencia",
+      "capacidadeMaxima",
+      "abertura",
+      "sNb",
+      "sP",
+      "sLi",
+    ],
+    Alimentacao: [
+      "porcentagemSolidos",
+      "variabilidade",
+      "densidade",
+      "taxaAlimentacao",
+    ],
+  };
   useEffect(() => {
-    if (isRunning) {
-      const id = setInterval(() => {
-        setTimer((prevTimer) => prevTimer + 1);
-      }, 1000);
-      setTimerId(id);
-    } else if (timerId) {
-      clearInterval(timerId);
-    }
-
-    return () => clearInterval(timerId);
-  }, [isRunning]);
-
-  useEffect(() => {
-    if (!(props.isRunning && props.play)) {
-      setIsRunning(false);
+    if (!props.play) {
       props.setEdges(
         props.edges.map((edge) => {
           edge.animated = false;
@@ -38,25 +62,52 @@ const FloatPlay = (props) => {
         })
       );
     }
-  }, [props.isRunning, props.play]);
+  }, [props.play, props.edges, props.setEdges]);
 
   const handleStart = () => {
-    setTimer(0);
-    props.setPlay(true);
-    setIsRunning(true);
-    props.setIsRunning(true);
-    props.setEdges(
-      props.edges.map((edge) => {
-        edge.animated = true;
-        return edge;
-      })
-    );
+    const flowData = JSON.parse(localStorage.getItem("flowData")) || {};
+    const properties = JSON.parse(localStorage.getItem("properties")) || {};
+    const nodes = flowData.nodes || [];
+    let allFieldsFilled = true;
+    let message = "";
+
+    nodes.forEach((node) => {
+      const nodeId = node.id;
+      const nodeType = node.data.image.tag;
+
+      const required = requiredFields[nodeType] || [];
+
+      const missingFields = required.filter(
+        (field) => !properties[nodeId]?.hasOwnProperty(field)
+      );
+
+      if (missingFields.length > 0) {
+        allFieldsFilled = false;
+        message += `No equipamento ${nodeId} (${nodeType}) está faltando os seguintes campos: ${missingFields.join(
+          ", "
+        )}\n`;
+      }
+    });
+
+    if (!allFieldsFilled) {
+      notification.error({
+        message: "Campos obrigatórios ausentes",
+        description: message,
+        duration: 5,
+      });
+    } else {
+      props.setPlay(true);
+      props.setEdges(
+        props.edges.map((edge) => {
+          edge.animated = true;
+          return edge;
+        })
+      );
+    }
   };
 
   const handlePause = () => {
     props.setPlay(false);
-    setIsRunning(false);
-    props.setIsRunning(false);
     props.setEdges(
       props.edges.map((edge) => {
         edge.animated = false;
@@ -67,15 +118,13 @@ const FloatPlay = (props) => {
 
   const handleStop = () => {
     props.setPlay(false);
-    props.setIsRunning(false);
-    setIsRunning(false);
     props.setEdges(
       props.edges.map((edge) => {
         edge.animated = false;
         return edge;
       })
     );
-    setTimer(0);
+    props.setSimulationTime(0); // Resetar o tempo de simulação no circuito
   };
 
   const handleShowSettings = () => {
@@ -116,7 +165,7 @@ const FloatPlay = (props) => {
           icon={<CaretRightFilled />}
           style={{ margin: "4px" }}
           onClick={handleStart}
-          disabled={isRunning && props.isRunning}
+          disabled={props.play}
         />
       </Tooltip>
       <Tooltip title="Pause">
@@ -126,7 +175,7 @@ const FloatPlay = (props) => {
           icon={<PauseOutlined />}
           style={{ margin: "4px" }}
           onClick={handlePause}
-          disabled={!(isRunning && props.isRunning)}
+          disabled={!props.play}
         />
       </Tooltip>
       <Tooltip title="Stop">
@@ -136,11 +185,13 @@ const FloatPlay = (props) => {
           icon={<BorderOutlined />}
           style={{ margin: "4px" }}
           onClick={handleStop}
-          disabled={!(isRunning && props.isRunning) && timer === 0}
+          disabled={!props.play && props.simulationTime === 0}
         />
       </Tooltip>
       <Tooltip title="Timer">
-        <div style={{ marginLeft: "8px" }}>{formatTime(timer)}</div>
+        <div style={{ marginLeft: "8px" }}>
+          {formatTime(props.simulationTime)}
+        </div>
       </Tooltip>
       <Button
         icon={<SettingFilled />}

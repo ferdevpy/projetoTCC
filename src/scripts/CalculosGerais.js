@@ -9,7 +9,6 @@ export function geraSeriePeneiras() {
 }
 
 export function calcularP80(dados) {
-  console.log(dados);
   const granulometria = dados.mm;
   const porcentagemPassante = dados.passantemm;
 
@@ -33,8 +32,6 @@ export function calcularP80(dados) {
       const x2 = granulometria[i];
       const y1 = porcentagemPassante[i + 1] * 100;
       const y2 = porcentagemPassante[i] * 100;
-      console.log("entrou for");
-      console.log(i);
       const P80 = x1 + ((80 - y1) * (x2 - x1)) / (y2 - y1);
       return P80;
     }

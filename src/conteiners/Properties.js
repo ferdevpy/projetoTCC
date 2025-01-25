@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import PropertiesBritagemPrimaria from "./PropertiesBritagemPrimaria";
 import PropertiesPeneiramento from "./PropertiesPeneiramento";
+import PropertiesBritagemSecundaria from "./PropertiesBritagemSecundaria";
 
 const LOCAL_STORAGE_KEY = "flowData";
 const Properties = (props) => {
@@ -204,6 +205,13 @@ const Properties = (props) => {
     ),
     BritagemPrimaria: (
       <PropertiesBritagemPrimaria
+        formProperties={formProperties}
+        formResults={formResults}
+        idNode={props.idNode}
+      />
+    ),
+    BritagemSecundaria: (
+      <PropertiesBritagemSecundaria
         formProperties={formProperties}
         formResults={formResults}
         idNode={props.idNode}

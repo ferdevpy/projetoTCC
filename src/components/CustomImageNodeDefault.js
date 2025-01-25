@@ -33,43 +33,39 @@ export default memo(({ data }) => {
   );
 
   return (
-    <Tooltip
-      title={gridContent}
-      color="#fafafa"
-      arrow={false}
-      placement="right"
-    >
-      <div>
-        <div style={{ textAlign: "center" }}>
-          <Handle
-            type="target"
-            position={Position.Top}
-            className="customHandleTop"
-          />
-          <div
-            style={{
-              width: "50px",
-              height: "50px",
-              display: "grid",
-              alignContent: "space-around",
-              border: "0.00000001rem ridge gray",
-              borderRadius: "4px",
-            }}
-          >
-            <Image
-              preview={false}
-              src={data.image.url}
-              style={data.image.size}
-            />
-          </div>
-          <Handle
-            className="customHandleBottom"
-            type="source"
-            position={Position.Bottom}
-            onConnect={(params) => console.log("handle onConnect", params)}
-          />
+    // <Tooltip
+    //   title={gridContent}
+    //   color="#fafafa"
+    //   arrow={false}
+    //   placement="right"
+    // >
+    <div>
+      <div style={{ textAlign: "center" }}>
+        <Handle
+          type="target"
+          position={Position.Top}
+          className="customHandleTop"
+        />
+        <div
+          style={{
+            width: "50px",
+            height: "50px",
+            display: "grid",
+            alignContent: "space-around",
+            border: "0.00000001rem ridge gray",
+            borderRadius: "4px",
+          }}
+        >
+          <Image preview={false} src={data.image.url} style={data.image.size} />
         </div>
+        <Handle
+          className="customHandleBottom"
+          type="source"
+          position={Position.Bottom}
+          onConnect={(params) => console.log("handle onConnect", params)}
+        />
       </div>
-    </Tooltip>
+    </div>
+    // </Tooltip>
   );
 });
